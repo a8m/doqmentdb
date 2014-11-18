@@ -102,8 +102,8 @@ describe('DoqmentDB', function() {
     });
 
     describe('.getCollectionByName()', function() {
-      it('should called `queryCollection`', function() {
-        DoQmentDB.getCollectionByName('name', {});
+      it('should called `queryCollections`', function() {
+        DoQmentDB.getCollectionByName({_self: '/', _colls: '/'}, 'test', {});
         DocumentDB.prototype.queryCollections.called.should.eql(true);
       });
     });
@@ -135,8 +135,8 @@ describe('DoqmentDB', function() {
 
       it('should create collection if it not exist, else return it', function(done) {
         Promise.props({
-          0: DoQmentDB.findOrCreateCollection({_self: '/'}, 'test'),
-          1: DoQmentDB.findOrCreateCollection({_self: '/'}, 'test')
+          0: DoQmentDB.findOrCreateCollection({_self: '/', _colls: '/'}, 'test'),
+          1: DoQmentDB.findOrCreateCollection({_self: '/', _colls: '/'}, 'test')
         }).done(function(res) {
           DocumentDB.prototype.createCollection.callCount.should.eql(1);
           res['1'].should.be.type('object');
