@@ -115,6 +115,12 @@ describe('DoqmentDB', function() {
         });
       });
 
+      describe('.findById()', function() {
+        it('should get id as a string and call `queryCollection`', function(done) {
+          assertCalled(dbManager.findById('foo'), done, queryStub);
+        });
+      });
+
       describe('.insert() | .create()', function() {
         var createStub;
         beforeEach(function() {
