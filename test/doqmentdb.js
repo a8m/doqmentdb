@@ -8,19 +8,24 @@ var should     = require('should');
 var Promise    = require('bluebird');
 
 
-// Helpers
+// Helpers: Mocks, and DocumentDB behavior
 var DB_MOCK = { _self: '/self', _colls: '/colls'};
 function toArray(args) {
   return { toArray: function(fb) { fb.apply(null, args);} }
 }
+function applyCallback(o1, o2, fb) { return fb() }
 
-function assertCalled(q, done, toCalled) {
+// Assertions helpers
+function assertCalled(q, done, toCalled, withArgs) {
   q.then(function(res) {
     (toCalled.called).should.eql(true);
+    // Test `calledWith` with the given arguments.
+    if(withArgs) {
+      toCalled.calledWith.apply(toCalled, withArgs).should.eql(true);
+    }
     done();
   });
 }
-
 
 describe('DoqmentDB', function() {
   describe('DatabaseManager', function() {
@@ -84,10 +89,12 @@ describe('DoqmentDB', function() {
       var queryStub, readStub;
 
       beforeEach(function() {
-        var stub = sinon.stub(DocumentDB.prototype,  'queryDatabases');
+        // _getDatabase
+        sinon.stub(DocumentDB.prototype,  'queryDatabases')
+          .returns(toArray([null, DB_MOCK]));
+        // (query|read)Collections
         queryStub = sinon.stub(DocumentDB.prototype, 'queryCollections');
         readStub = sinon.stub(DocumentDB.prototype,  'readCollections');
-        stub.returns(toArray([null, DB_MOCK]));
         queryStub.returns(toArray([null, [1, 2]]));
         readStub.returns(toArray([null, [1, 2]]));
       });
@@ -105,6 +112,27 @@ describe('DoqmentDB', function() {
 
         it('should get an `undefined` params and call `readCollections`', function(done) {
           assertCalled(dbManager.find(undefined), done, readStub);
+        });
+      });
+
+      describe('.insert() | .create()', function() {
+        var createStub;
+        beforeEach(function() {
+          createStub = sinon.stub(DocumentDB.prototype, 'createCollection', applyCallback);
+        });
+
+        it('should get name and call `createCollection`', function(done) {
+          var name = 'foo';
+          var args = [DB_MOCK._self,  { id: name }];
+          assertCalled(dbManager.create(name), done, createStub, args);
+        });
+
+        it('should have aliases', function() {
+          dbManager.create.should.eql(dbManager.insert);
+        });
+
+        afterEach(function() {
+          createStub.restore();
         });
       });
 
