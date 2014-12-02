@@ -2,7 +2,6 @@
 /*global beforeEach, afterEach*/
 var DocumentDB = require('documentdb').DocumentClient;
 var DoQmentDB  = require('..');
-var _          = require('agile');
 var sinon      = require('sinon');
 var should     = require('should');
 var Promise    = require('bluebird');
@@ -99,6 +98,17 @@ describe('DoqmentDB', function() {
         readStub = sinon.stub(DocumentDB.prototype,  'readCollections');
         queryStub.returns(toArray([null, [COLL_MOCK]]));
         readStub.returns(toArray([null, [1, 2]]));
+      });
+
+      describe('.getDatabase()', function() {
+        it('should return the used collection, call `queryCollection`', function(done) {
+          dbManager.getDatabase()
+            .then(function(db) {
+              db.should.eql(DB_MOCK);
+              DocumentDB.prototype.queryDatabases.called.should.eql(true);
+              done();
+            });
+        });
       });
 
       describe('.find()', function() {
@@ -215,6 +225,24 @@ describe('DoqmentDB', function() {
 
           it('should get object params and call `queryDocuments`', function(done) {
             assertCalled(users.find({ id: 12 }), done, queryStub);
+          });
+        });
+
+        describe('.fineOne', function() {
+          it('should return the first member in the results', function(done) {
+            Promise.props({
+              all: users.find({ id: 1 }),
+              one: users.findOne({ id: 1 })
+            }).then(function(res) {
+              res.one.should.eql(res.all[0]);
+              done();
+            });
+          });
+        });
+
+        describe('.findById()', function() {
+          it('should get id as a string and call `queryDocuments`', function(done) {
+            assertCalled(users.findById('foo'), done, queryStub);
           });
         });
 
