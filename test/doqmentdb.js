@@ -8,9 +8,9 @@ var Promise    = require('bluebird');
 
 
 // Helpers: Mocks, and DocumentDB behavior
-var DB_MOCK   = { _self: '/self', _colls: '/colls' };
-var COLL_MOCK = { _self: '/self', _docs:  '/docs'  };
-var DOC_MOCK  = { _self: '/self', _id:    '54123'  };
+var DB_MOCK   = { _self: '/self/db',  _colls: '/colls' };
+var COLL_MOCK = { _self: '/self/col', _docs:  '/docs'  };
+var DOC_MOCK  = { _self: '/self/doc', _id:    '54123'  };
 function toArray(args) {
   return { toArray: function(fb) { fb.apply(null, args);} }
 }
@@ -243,6 +243,17 @@ describe('DoqmentDB', function() {
         describe('.findById()', function() {
           it('should get id as a string and call `queryDocuments`', function(done) {
             assertCalled(users.findById('foo'), done, queryStub);
+          });
+        });
+
+        describe('.findOneAndRemove', function() {
+          var removeStub;
+          beforeEach(function() {
+            removeStub = sinon.stub(DocumentDB.prototype, 'deleteDocument', applyCallback);
+          });
+
+          it('should get the first result and call `deleteDocument`', function(done) {
+            assertCalled(users.findOneAndRemove({ id: 2 }), done, removeStub, [DOC_MOCK._self]);
           });
         });
 
