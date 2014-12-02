@@ -269,6 +269,26 @@ describe('DoqmentDB', function() {
           });
         });
 
+        describe('.create() | .insert()', function() {
+          var createStub;
+          beforeEach(function() {
+            createStub = sinon.stub(DocumentDB.prototype, 'createDocument', applyCallback);
+          });
+
+          it('should not get an object params and complete it to empty object', function(done) {
+            assertCalled(users.create(), done, createStub, [COLL_MOCK._self, {}]);
+          });
+
+          it('should get an object params and call `createDocument` with it', function(done) {
+            var o1 = { id: 1, name: 'Ariel M.' };
+            assertCalled(users.create(o1), done, createStub, [COLL_MOCK._self, o1]);
+          });
+
+          afterEach(function() {
+            createStub.restore();
+          });
+        });
+
         afterEach(function() {
           readStub.restore();
           queryStub.restore();
