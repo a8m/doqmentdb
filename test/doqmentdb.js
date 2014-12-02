@@ -122,6 +122,22 @@ describe('DoqmentDB', function() {
         });
       });
 
+      describe('.findAndCreate()', function() {
+        var createStub;
+        beforeEach(function() {
+          createStub = sinon.stub(DocumentDB.prototype, 'createCollection', applyCallback);
+          queryStub.returns(toArray([null, []]));
+        });
+        it('should call `createCollection` if it\'s not exist', function(done) {
+          var users = { id: '31' };
+          var args  = [DB_MOCK._self, users];
+          assertCalled(dbManager.findOrCreate(users), done, createStub, args);
+        });
+        afterEach(function() {
+          createStub.restore();
+        });
+      });
+
       describe('.insert() | .create()', function() {
         var createStub;
         beforeEach(function() {
