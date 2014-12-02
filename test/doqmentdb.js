@@ -348,6 +348,33 @@ describe('DoqmentDB', function() {
           });
         });
 
+        describe('.findOrCreate()', function() {
+          var createStub;
+          beforeEach(function() {
+            createStub = stub(DocumentDB.prototype, 'createDocument', applyCallback);
+          });
+
+          it('should call `createDocument` if it not exist', function(done) {
+            queryStub.returns(toArray([null, []]));
+            assertCalled(users.findOrCreate({id:1}), done, createStub);
+          });
+
+          it('should return the result if it exist', function(done) {
+            var user = { id: 3 };
+            queryStub.returns(toArray([null, [user]]));
+            users.findOrCreate(user)
+              .then(function(res) {
+                res.should.eql(user);
+                createStub.called.should.eql(false);
+                done();
+              })
+          });
+
+          afterEach(function() {
+            createStub.restore();
+          });
+        });
+
         afterEach(function() {
           readStub.restore();
           queryStub.restore();
