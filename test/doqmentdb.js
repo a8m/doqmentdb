@@ -171,6 +171,20 @@ describe('DoqmentDB', function() {
         });
       });
 
+      describe('.use()', function() {
+        it('should return an object immediately(not async operation)', function() {
+          dbManager.use('users').should.be.type('object');
+        });
+
+        it('should return instance of collectionManager', function() {
+          dbManager.use('users').constructor.name.should.eql('Collection');
+        });
+      });
+
+      describe('CollectionManager', function() {
+        
+      });
+
       afterEach(function() {
         queryStub.restore();
         readStub.restore();
