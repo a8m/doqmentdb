@@ -212,6 +212,10 @@ describe('DoqmentDB', function() {
           it('should get undefined param and call `readDocuments`', function(done) {
             assertCalled(users.find(undefined), done, readStub);
           });
+
+          it('should get object params and call `queryDocuments`', function(done) {
+            assertCalled(users.find({ id: 12 }), done, queryStub);
+          });
         });
 
         afterEach(function() {
