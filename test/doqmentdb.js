@@ -257,6 +257,18 @@ describe('DoqmentDB', function() {
           });
         });
 
+        describe('.findOneAndModify', function() {
+          var updateStub;
+          beforeEach(function() {
+            updateStub = sinon.stub(DocumentDB.prototype, 'replaceDocument', applyCallback);
+          });
+
+          it('should get the first result and call `replaceDocument` extened', function(done) {
+            var update = users.findOneAndModify({ id: 2 }, { name: 3 });
+            assertCalled(update, done, updateStub, [DOC_MOCK._self]);
+          });
+        });
+
         afterEach(function() {
           readStub.restore();
           queryStub.restore();
