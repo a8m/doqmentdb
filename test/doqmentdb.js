@@ -1,8 +1,8 @@
 'use strict';
-/*global beforeEach, afterEach*/
+/*global beforeEach, afterEach, stub*/
 var DocumentDB = require('documentdb').DocumentClient;
 var DoQmentDB  = require('..');
-var sinon      = require('sinon');
+var stub       = require('sinon').stub;
 var should     = require('should');
 var Promise    = require('bluebird');
 
@@ -50,10 +50,10 @@ describe('DoqmentDB', function() {
       var dbManager  = new DoQmentDB(connection, '');
 
       beforeEach(function() {
-        sinon.stub(DocumentDB.prototype, 'createDatabase', function(obj, fb) {fb()});
-        var stub = sinon.stub(DocumentDB.prototype, 'queryDatabases');
-        stub.onCall(0).returns(toArray([null, []]));
-        stub.onCall(1).returns(toArray([null, [{}]]));
+        stub(DocumentDB.prototype, 'createDatabase', function(obj, fb) {fb()});
+        var stub1 = stub(DocumentDB.prototype, 'queryDatabases');
+        stub1.onCall(0).returns(toArray([null, []]));
+        stub1.onCall(1).returns(toArray([null, [{}]]));
       });
 
       describe('working with non-existing(in Azure) database', function() {
@@ -91,11 +91,11 @@ describe('DoqmentDB', function() {
 
       beforeEach(function() {
         // _getDatabase
-        sinon.stub(DocumentDB.prototype,  'queryDatabases')
+        stub(DocumentDB.prototype,  'queryDatabases')
           .returns(toArray([null, DB_MOCK]));
         // (query|read)Collections
-        queryStub = sinon.stub(DocumentDB.prototype, 'queryCollections');
-        readStub = sinon.stub(DocumentDB.prototype,  'readCollections');
+        queryStub = stub(DocumentDB.prototype, 'queryCollections');
+        readStub = stub(DocumentDB.prototype,  'readCollections');
         queryStub.returns(toArray([null, [COLL_MOCK]]));
         readStub.returns(toArray([null, [1, 2]]));
       });
@@ -136,7 +136,7 @@ describe('DoqmentDB', function() {
       describe('.findAndCreate()', function() {
         var createStub;
         beforeEach(function() {
-          createStub = sinon.stub(DocumentDB.prototype, 'createCollection', applyCallback);
+          createStub = stub(DocumentDB.prototype, 'createCollection', applyCallback);
           queryStub.returns(toArray([null, []]));
         });
         it('should call `createCollection` if it\'s not exist', function(done) {
@@ -152,7 +152,7 @@ describe('DoqmentDB', function() {
       describe('.insert() | .create()', function() {
         var createStub;
         beforeEach(function() {
-          createStub = sinon.stub(DocumentDB.prototype, 'createCollection', applyCallback);
+          createStub = stub(DocumentDB.prototype, 'createCollection', applyCallback);
         });
 
         it('should get name and call `createCollection`', function(done) {
@@ -173,7 +173,7 @@ describe('DoqmentDB', function() {
       describe('.remove()', function() {
         var removeStub;
         beforeEach(function() {
-          removeStub = sinon.stub(DocumentDB.prototype, 'deleteCollection', applyCallback);
+          removeStub = stub(DocumentDB.prototype, 'deleteCollection', applyCallback);
           queryStub.returns(toArray([null, [COLL_MOCK]]));
         });
 
@@ -197,8 +197,8 @@ describe('DoqmentDB', function() {
         var readStub, queryStub;
 
         beforeEach(function() {
-          readStub = sinon.stub(DocumentDB.prototype, 'readDocuments');
-          queryStub = sinon.stub(DocumentDB.prototype, 'queryDocuments');
+          readStub = stub(DocumentDB.prototype, 'readDocuments');
+          queryStub = stub(DocumentDB.prototype, 'queryDocuments');
           queryStub.returns(toArray([null, [DOC_MOCK]]));
           readStub.returns(toArray([null, [1, 2]]));
         });
@@ -249,30 +249,38 @@ describe('DoqmentDB', function() {
         describe('.findOneAndRemove', function() {
           var removeStub;
           beforeEach(function() {
-            removeStub = sinon.stub(DocumentDB.prototype, 'deleteDocument', applyCallback);
+            removeStub = stub(DocumentDB.prototype, 'deleteDocument', applyCallback);
           });
 
           it('should get the first result and call `deleteDocument`', function(done) {
             assertCalled(users.findOneAndRemove({ id: 2 }), done, removeStub, [DOC_MOCK._self]);
+          });
+
+          afterEach(function() {
+            removeStub.restore();
           });
         });
 
         describe('.findOneAndModify', function() {
           var updateStub;
           beforeEach(function() {
-            updateStub = sinon.stub(DocumentDB.prototype, 'replaceDocument', applyCallback);
+            updateStub = stub(DocumentDB.prototype, 'replaceDocument', applyCallback);
           });
 
           it('should get the first result and call `replaceDocument` extened', function(done) {
             var update = users.findOneAndModify({ id: 2 }, { name: 3 });
             assertCalled(update, done, updateStub, [DOC_MOCK._self]);
           });
+
+          afterEach(function() {
+            updateStub.restore();
+          });
         });
 
         describe('.create() | .insert()', function() {
           var createStub;
           beforeEach(function() {
-            createStub = sinon.stub(DocumentDB.prototype, 'createDocument', applyCallback);
+            createStub = stub(DocumentDB.prototype, 'createDocument', applyCallback);
           });
 
           it('should not get an object params and complete it to empty object', function(done) {
@@ -286,6 +294,57 @@ describe('DoqmentDB', function() {
 
           afterEach(function() {
             createStub.restore();
+          });
+        });
+
+        describe('Groups', function() {
+          var results = [{_self: 1}, {_self: 2}, {_self: 3}, {_self: 4}];
+          beforeEach(function() {
+            readStub.returns(toArray([null, results]));
+          });
+
+          // #1
+          describe('.findAndRemove()', function() {
+            var removeStub;
+            beforeEach(function() {
+              removeStub = stub(DocumentDB.prototype, 'deleteDocument', applyCallback);
+            });
+
+            it('should call `deleteDocument` to each result', function(done) {
+              users.findAndRemove({})
+                .then(function() {
+                  removeStub.callCount.should.eql(results.length);
+                  done()
+                });
+            });
+
+            afterEach(function() {
+              removeStub.restore();
+            });
+          });
+
+          // #2
+          describe('.findAndModify()', function() {
+            var updateStub;
+            beforeEach(function() {
+              updateStub = stub(DocumentDB.prototype, 'replaceDocument', applyCallback);
+            });
+
+            it('should call `replaceDocument` with each result', function(done) {
+              users.findAndModify({}, {})
+                .then(function() {
+                  updateStub.callCount.should.eql(results.length);
+                  done();
+                });
+            });
+
+            it('should have an aliases `update`', function() {
+              users.update.should.eql(users.findAndModify);
+            });
+
+            afterEach(function() {
+              updateStub.restore();
+            });
           });
         });
 
