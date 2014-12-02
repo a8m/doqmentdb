@@ -6,7 +6,7 @@ var dbConnection = new (require('documentdb').DocumentClient)(CONFIG.HOST, CONFI
 var db = new DoQmentDB(dbConnection, 'test');
 var users = db.use('users');
 
-users.create({ id: '6534' })
+users.create({ name: '6534' })
   .then(console.log);
 //users.findOrCreate({ id: '23asds412', name: 'bar' })
 //  .then(console.log)

@@ -10,10 +10,11 @@ var Promise    = require('bluebird');
 
 // Helpers: Mocks, and DocumentDB behavior
 var DB_MOCK = { _self: '/self', _colls: '/colls'};
+var COLL_MOCK = { _self: '/self', _docs: '/docs'};
 function toArray(args) {
   return { toArray: function(fb) { fb.apply(null, args);} }
 }
-function applyCallback(o1, o2, fb) { return fb() }
+function applyCallback(o1, o2, cb) { return (cb||o2)() }
 
 // Assertions helpers
 function assertCalled(q, done, toCalled, withArgs) {
@@ -139,6 +140,18 @@ describe('DoqmentDB', function() {
 
         afterEach(function() {
           createStub.restore();
+        });
+      });
+
+      describe('.remove()', function() {
+        var removeStub;
+        beforeEach(function() {
+          removeStub = sinon.stub(DocumentDB.prototype, 'deleteCollection', applyCallback);
+          queryStub.returns(toArray([null, [COLL_MOCK]]));
+        });
+
+        it('should get collection id and call `deleteCollection`', function(done) {
+          assertCalled(dbManager.remove('id'), done, removeStub, [COLL_MOCK._self]);
         });
       });
 
