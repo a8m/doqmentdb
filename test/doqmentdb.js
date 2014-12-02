@@ -9,8 +9,9 @@ var Promise    = require('bluebird');
 
 
 // Helpers: Mocks, and DocumentDB behavior
-var DB_MOCK = { _self: '/self', _colls: '/colls'};
-var COLL_MOCK = { _self: '/self', _docs: '/docs'};
+var DB_MOCK   = { _self: '/self', _colls: '/colls' };
+var COLL_MOCK = { _self: '/self', _docs:  '/docs'  };
+var DOC_MOCK  = { _self: '/self', _id:    '54123'  };
 function toArray(args) {
   return { toArray: function(fb) { fb.apply(null, args);} }
 }
@@ -96,7 +97,7 @@ describe('DoqmentDB', function() {
         // (query|read)Collections
         queryStub = sinon.stub(DocumentDB.prototype, 'queryCollections');
         readStub = sinon.stub(DocumentDB.prototype,  'readCollections');
-        queryStub.returns(toArray([null, [1, 2]]));
+        queryStub.returns(toArray([null, [COLL_MOCK]]));
         readStub.returns(toArray([null, [1, 2]]));
       });
 
@@ -182,7 +183,41 @@ describe('DoqmentDB', function() {
       });
 
       describe('CollectionManager', function() {
-        
+        var users = dbManager.use('users');
+        var readStub, queryStub;
+
+        beforeEach(function() {
+          readStub = sinon.stub(DocumentDB.prototype, 'readDocuments');
+          queryStub = sinon.stub(DocumentDB.prototype, 'queryDocuments');
+          queryStub.returns(toArray([null, [DOC_MOCK]]));
+          readStub.returns(toArray([null, [1, 2]]));
+        });
+
+        describe('.getCollection()', function() {
+          it('should return the used collection, call `queryCollection`', function(done) {
+            users.getCollection()
+              .then(function(coll) {
+                coll.should.eql(COLL_MOCK);
+                DocumentDB.prototype.queryCollections.called.should.eql(true);
+                done();
+              });
+          });
+        });
+
+        describe('.find()', function() {
+          it('should get empty object and call `readDocuments`', function(done) {
+            assertCalled(users.find({}), done, readStub);
+          });
+
+          it('should get undefined param and call `readDocuments`', function(done) {
+            assertCalled(users.find(undefined), done, readStub);
+          });
+        });
+
+        afterEach(function() {
+          readStub.restore();
+          queryStub.restore();
+        });
       });
 
       afterEach(function() {
