@@ -140,7 +140,7 @@ describe('DoqmentDB', function() {
           queryStub.returns(toArray([null, []]));
         });
         it('should call `createCollection` if it\'s not exist', function(done) {
-          var users = { id: '31' };
+          var users = { id: '31', name: 'foo' };
           var args  = [DB_MOCK._self, users];
           assertCalled(dbManager.findOrCreate(users), done, createStub, args);
         });
@@ -381,26 +381,54 @@ describe('DoqmentDB', function() {
         });
       });
 
-      describe('@private', function() {
-        describe('Manager', function() {
-          var Manager = require('../lib/manager');
-          it('should accept only DocumentDB instances as an argument', function() {
-            (function() {
-              new Manager({});
-            }).should.throw();
-
-            (function() {
-              new Manager(new DocumentDB({}));
-            }).should.not.throw();
-          });
-        });
-      });
-
       afterEach(function() {
         queryStub.restore();
         readStub.restore();
         DocumentDB.prototype.queryDatabases.restore();
       });
     });
+
+
+    describe('@private', function() {
+      describe('Manager', function() {
+        var Manager = require('../lib/manager');
+        it('should accept only DocumentDB instances as an argument', function() {
+          (function() {
+            new Manager({});
+          }).should.throw();
+
+          (function() {
+            new Manager(new DocumentDB({}));
+          }).should.not.throw();
+        });
+      });
+
+      describe('utils', function() {
+        var _ = require('../lib/utils');
+        describe('.type()', function() {
+          it('should return the type of the given db object', function() {
+            _.type(DB_MOCK).should.eql('Database');
+            _.type(COLL_MOCK).should.eql('Collection');
+            _.type(DOC_MOCK).should.eql('Document');
+            // typeof
+            _.type({}).should.eql('object');
+          });
+        });
+
+        describe('.isDefined()', function() {
+          it('should test if the given value is defined', function() {
+            _.isDefined({}).should.eql(true);
+            _.isDefined(undefined).should.eql(false);
+          });
+        });
+
+        describe('.isDocument()', function() {
+          it('should test if the given object is Document', function() {
+            _.isDocument(DOC_MOCK).should.eql(true);
+          });
+        });
+      });
+    });
+
   });
 });
