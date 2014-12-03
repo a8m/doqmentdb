@@ -381,6 +381,21 @@ describe('DoqmentDB', function() {
         });
       });
 
+      describe('@private', function() {
+        describe('Manager', function() {
+          var Manager = require('../lib/manager');
+          it('should accept only DocumentDB instances as an argument', function() {
+            (function() {
+              new Manager({});
+            }).should.throw();
+
+            (function() {
+              new Manager(new DocumentDB({}));
+            }).should.not.throw();
+          });
+        });
+      });
+
       afterEach(function() {
         queryStub.restore();
         readStub.restore();
