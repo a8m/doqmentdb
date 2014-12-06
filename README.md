@@ -79,3 +79,14 @@ Return the used database.
 db.getDatabase()
   .then(console.log);
 ```
+##find
+find collection by given object params.  
+**Note:** to return all collections, omit params argument or pass an empty object({}).  
+**Usage:** `db.find(object[optional])`
+```js
+db.find()
+  .then(console.log); // Return all collections
+  
+db.find({ id: 'users' })
+  .then(console.log); // Return collection where id equal to `users`
+```
