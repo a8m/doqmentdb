@@ -204,3 +204,11 @@ get object properties and modify(`extend` operation) the first matching.
 users.findOneAndModify({ admin: false }, { admin: true })
   .then(console.log);
 ```
+##findOrCreate
+get object properties, search for document, if it not exist create one.  
+**Usage:** `users.findOrCreate(object)`    
+**Returns:** `Object`
+```js
+users.findOrCreate({ admin: false, name: 'Ariel' })
+  .then(console.log);
+```
