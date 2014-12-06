@@ -171,3 +171,11 @@ find document by giving a `string` id.
 users.findById('53...3')
   .then(console.log);
 ```
+##findAndRemove
+get object properties to search, find the equivalents and remove them.  
+**Usage:** `users.findAndRemove(object)`  
+**Returns:** `Array`
+```js
+users.findAndRemove({ name: 'Ariel' })
+  .then(console.log);
+```
