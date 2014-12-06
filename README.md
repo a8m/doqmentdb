@@ -196,3 +196,11 @@ get object properties to search, find the equivalents and modify them(`extend` o
 users.update({ name: 'Ariel', admin: true }, { admin: false })
   .then(console.log);
 ```
+##findOneAndModify
+get object properties and modify(`extend` operation) the first matching.  
+**Usage:** `users.findOneAndModify(object, extend)`  
+**Returns:** `Object`
+```js
+users.findOneAndModify({ admin: false }, { admin: true })
+  .then(console.log);
+```
