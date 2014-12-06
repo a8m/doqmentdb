@@ -46,6 +46,7 @@ var db = new DoQmentDB(connection, 'test');
 // Create a CollectionManager instance, if `users` is not exist it will create one
 var users = db.use('users');
 
+// Each http function returns a Promise with two specific methods: success and error.
 users.create({ name: '6534' })
   .then(console.log);
   
@@ -98,5 +99,13 @@ find collection by given `string` id.
 **Returns:** `Object`
 ```js
 db.findById('users')
+  .then(console.log);
+```
+##findOrCreate
+get object properties, search for collection, if it not exist create one.  
+**Usage:** `db.findOrCreate(object)`  
+**Returns:** `Object`
+```js
+db.findOrCreate({ name: 'users', id: '#1' })
   .then(console.log);
 ```
