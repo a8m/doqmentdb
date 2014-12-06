@@ -150,8 +150,16 @@ users.getCollection()
 ##find
 get object properties and return array of results.  
 **Usage:** `users.find(object)`  
-**Returns:** `Object`
+**Returns:** `Array`
 ```js
 users.find({ active: true })
+  .then(console.log);
+```
+##findOne
+get object properties and return the first matching result.  
+**Usage:** `users.findOne(object)`  
+**Returns:** `Object`
+```js
+users.findOne({ active: true, name: 'Bar' })
   .then(console.log);
 ```
