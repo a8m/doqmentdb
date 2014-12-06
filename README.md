@@ -43,7 +43,7 @@ var CONFIG     = require('./config');
 var connection = new (require('documentdb').DocumentClient)(CONFIG.HOST, CONFIG.OPTIONS);
 // Pass connection and database-name(<= auto-creating, e.g: `findOrCreate`)
 var db = new DoQmentDB(connection, 'test');
-// Create a CollectionManager instance, if `users` is not exist it will create one
+// Create a CollectionManager instance, if `users` is not exist it will create one.
 var users = db.use('users');
 
 // Each http function returns a Promise with two specific methods: success and error.
@@ -110,10 +110,20 @@ db.findOrCreate({ name: 'users', id: '#1' })
   .then(console.log);
 ```
 ##remove
-get collection id as a `String`, if it exist - remove it and return undefined, else return false.  
+get collection id as a `String`, if it exist - remove it and return `undefined`, else return `false`.  
 **Usage:** `db.remove(string)`  
 **Returns:** `undefined` or `Boolean`
 ```js
 db.remove('test')
   .then(console.log);
 ```
+##use
+get collection name and return `CollectionManager` instance.  
+**Note:** if the given `collection` is not exist it will create one.  
+**Usage:** `var users = db.use(string);`  
+**Returns:** `object` instanceof `Collection`
+```js
+var users = db.use('users'); // This operation is not async
+```
+
+
