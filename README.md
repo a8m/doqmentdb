@@ -187,3 +187,12 @@ get object properties, and remove the first matching result.
 users.findOneAndRemove({ name: 'Ariel', admin: true })
   .then(console.log);
 ```
+##findAndModify
+get object properties to search, find the equivalents and modify them(`extend` operation).  
+**Usage:** `users.findAndModify(object, extend)`  
+**Aliases:** `update`  
+**Returns:** `Array`
+```js
+users.update({ name: 'Ariel', admin: true }, { admin: false })
+  .then(console.log);
+```
