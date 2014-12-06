@@ -60,7 +60,7 @@ Create a databaseManager by passing `connection` and `databaseName`.
 ```js
 var DoQmentDB  = require('doqmentdb');
 // Create DocumentDB connection
-var connection = new (require('documentdb').DocumentClient)(CONFIG.HOST, CONFIG.OPTIONS);
+var connection = new (require('documentdb').DocumentClient)(HOST, OPTIONS);
 // if `test` is not exist it will create one
 var db = new DoQmentDB(connection, 'test');
 ```
@@ -70,5 +70,12 @@ Get name and crete new collection in the used db.
 **Aliases:** `insert`
 ```js
 db.create('users')
+  .then(console.log);
+```
+##getDatabase
+Return the used database.  
+**Usage:** `db.getDatabase()`
+```js
+db.getDatabase()
   .then(console.log);
 ```
