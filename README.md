@@ -131,4 +131,12 @@ Create a CollectionManager by passing to `.use` function a collection name.
 var users = db.use('users'); 
 console.log(users.constructor.name); // Collection
 ```
-
+##create
+get object properties, and create new document under the used collection.  
+**Usage:** `users.create(object)`  
+**Aliases:** `insert`  
+**Returns:** `Object`
+```js
+users.create({ name: 'Ariel', admin: true })
+  .then(console.log); // { name: 'Ariel', admin: true, id: '8...31', _self: ... }
+```
