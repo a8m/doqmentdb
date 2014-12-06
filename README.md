@@ -179,3 +179,11 @@ get object properties to search, find the equivalents and remove them.
 users.findAndRemove({ name: 'Ariel' })
   .then(console.log);
 ```
+##findOneAndRemove
+get object properties, and remove the first matching result.  
+**Usage:** `users.findOneAndRemove(object)`  
+**Returns:** `undefined` or `Boolean`
+```js
+users.findOneAndRemove({ name: 'Ariel', admin: true })
+  .then(console.log);
+```
