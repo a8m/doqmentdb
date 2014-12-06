@@ -67,7 +67,8 @@ var db = new DoQmentDB(connection, 'test');
 ##create
 Get name and crete new collection in the used db.  
 **Usage:** `db.create(string)`  
-**Aliases:** `insert`
+**Aliases:** `insert`  
+**Returns:** `Object`
 ```js
 db.create('users')
   .then(console.log);
@@ -82,11 +83,20 @@ db.getDatabase()
 ##find
 find collection by given object params.  
 **Note:** to return all collections, omit params argument or pass an empty object({}).  
-**Usage:** `db.find(object[optional])`
+**Usage:** `db.find(object[optional])`  
+**Returns:** `Array`
 ```js
 db.find()
   .then(console.log); // Return all collections
   
 db.find({ id: 'users' })
   .then(console.log); // Return collections where id equal to `users`
+```
+##findById
+find collection by given `string` id.  
+**Usage:** `db.findById(string)`  
+**Returns:** `Object`
+```js
+db.findById('users')
+  .then(console.log);
 ```
