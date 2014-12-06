@@ -88,5 +88,5 @@ db.find()
   .then(console.log); // Return all collections
   
 db.find({ id: 'users' })
-  .then(console.log); // Return collection where id equal to `users`
+  .then(console.log); // Return collections where id equal to `users`
 ```
