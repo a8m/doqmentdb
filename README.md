@@ -140,3 +140,10 @@ get object properties, and create new document under the used collection.
 users.create({ name: 'Ariel', admin: true })
   .then(console.log); // { name: 'Ariel', admin: true, id: '8...31', _self: ... }
 ```
+##getCollection
+return the used collection.  
+**Usage:** `users.getCollection()`
+```js
+users.getCollection()
+  .then(console.log);
+```
