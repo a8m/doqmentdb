@@ -1,5 +1,12 @@
-##DoQmentDB - A Promise-Based DocumentDB Client [![Build Status](https://travis-ci.org/a8m/doqmentdb.svg?branch=master)](https://travis-ci.org/a8m/doqmentdb) [![Coverage Status](https://coveralls.io/repos/a8m/doqmentdb/badge.png?branch=master)](https://coveralls.io/r/a8m/doqmentdb?branch=master)
-> DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users, **v0.0.1**.
+##DoQmentDB - A Promise-Based DocumentDB Client 
+[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
+[![Test coverage][coveralls-image]][coveralls-url]
+[![Dependency Status][david-image]][david-url]
+[![License][license-image]][license-url]
+[![Downloads][downloads-image]][downloads-url]
+[![Gittip][gittip-image]][gittip-url]
+> DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users.
 
 ##Table of contents:
 - [Get Started](#get-started)
@@ -216,3 +223,18 @@ get object properties, search for document, if it not exist create one.
 users.findOrCreate({ admin: false, name: 'Ariel' })
   .then(console.log);
 ```
+
+[npm-image]: https://img.shields.io/npm/v/doqmentdb.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/doqmentdb
+[travis-image]: https://img.shields.io/travis/a8m/doqmentdb.svg?style=flat-square
+[travis-url]: https://travis-ci.org/a8m/doqmentdb
+[coveralls-image]: https://img.shields.io/coveralls/a8m/doqmentdb.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/a8m/doqmentdb
+[david-image]: http://img.shields.io/david/a8m/doqmentdb.svg?style=flat-square
+[david-url]: https://david-dm.org/a8m/doqmentdb
+[license-image]: http://img.shields.io/npm/l/doqmentdb.svg?style=flat-square
+[license-url]: LICENSE
+[downloads-image]: http://img.shields.io/npm/dm/doqmentdb.svg?style=flat-square
+[downloads-url]: https://npmjs.org/package/doqmentdb
+[gittip-image]: https://img.shields.io/gratipay/a8m.svg?style=flat-square
+[gittip-url]: https://gratipay.com/a8m/
