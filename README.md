@@ -4,7 +4,27 @@
 ##Table of contents:
 - [Get Started](#get-started)
 - [Database](#database)
+  - [create](#create)
+  - [insert](#create)
+  - [getDatabase](#getdatabase)
+  - [find](#find)
+  - [findById](#findbyid)
+  - [findOrCreate](#findorcreate)
+  - [remove](#remove)
+  - [use](#use)
 - [Collection](#collection)
+  - [create](#create-1)
+  - [insert](#create-1)
+  - [getCollection](#getcollection)
+  - [find](#find-1)
+  - [findOne](#findone)
+  - [findById](#findbyid-1)
+  - [findAndRemove](#findandremove)
+  - [findOneAndRemove](#findoneandremove)
+  - [findAndModify](#findandmodify)
+  - [findOneAndModify](#findoneandmodify)
+  - [findOrCreate](#findorcreate-1)
+  - [update](#findandmodify)
 
 #Get Started
 **(1)** You can install **DoQmentDB** using 2 different methods:  
