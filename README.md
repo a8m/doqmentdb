@@ -57,7 +57,7 @@ users.findAndRemove({ isAdmin: false })
   .then(console.log);
 ```
 #Database
-Create a databaseManager by passing `connection` and `databaseName`.
+Create a DatabaseManager by passing `connection` and `databaseName`.
 ```js
 var DoQmentDB  = require('doqmentdb');
 // Create DocumentDB connection
@@ -120,10 +120,15 @@ db.remove('test')
 ##use
 get collection name and return `CollectionManager` instance.  
 **Note:** if the given `collection` is not exist it will create one.  
-**Usage:** `var users = db.use(string);`  
-**Returns:** `object` instanceof `Collection`
+**Usage:** `var coll = db.use(string);`  
+**Returns:** `object` instanceof `CollectionManager`
 ```js
 var users = db.use('users'); // This operation is not async
 ```
-
+#Collection
+Create a CollectionManager by passing to `.use` function a collection name.
+```js
+var users = db.use('users'); 
+console.log(users.constructor.name); // Collection
+```
 
