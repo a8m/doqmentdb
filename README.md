@@ -109,3 +109,11 @@ get object properties, search for collection, if it not exist create one.
 db.findOrCreate({ name: 'users', id: '#1' })
   .then(console.log);
 ```
+##remove
+get collection id as a `String`, if it exist - remove it and return undefined, else return false.  
+**Usage:** `db.remove(string)`  
+**Returns:** `undefined` or `Boolean`
+```js
+db.remove('test')
+  .then(console.log);
+```
