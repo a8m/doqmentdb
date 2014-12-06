@@ -163,3 +163,11 @@ get object properties and return the first matching result.
 users.findOne({ active: true, name: 'Bar' })
   .then(console.log);
 ```
+##findById
+find document by giving a `string` id.  
+**Usage:** `users.findById(string)`  
+**Returns:** `Object`
+```js
+users.findById('53...3')
+  .then(console.log);
+```
