@@ -147,3 +147,11 @@ return the used collection.
 users.getCollection()
   .then(console.log);
 ```
+##find
+get object properties and return array of results.  
+**Usage:** `users.find(object)`  
+**Returns:** `Object`
+```js
+users.find({ active: true })
+  .then(console.log);
+```
