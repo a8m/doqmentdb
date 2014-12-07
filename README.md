@@ -5,7 +5,6 @@
 [![Dependency Status][david-image]][david-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
-[![Gittip][gittip-image]][gittip-url]
 > DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users.
 
 ##Table of contents:
@@ -235,5 +234,3 @@ users.findOrCreate({ admin: false, name: 'Ariel' })
 [license-url]: LICENSE
 [downloads-image]: http://img.shields.io/npm/dm/doqmentdb.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/doqmentdb
-[gittip-image]: https://img.shields.io/gratipay/a8m.svg?style=flat-square
-[gittip-url]: https://gratipay.com/a8m/
