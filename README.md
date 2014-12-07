@@ -45,15 +45,14 @@ var DoqmentDB = require('doqmentdb');
 **(3)** Start Playing with DoqmentDB:
 ```js
 var DoQmentDB  = require('doqmentdb');
-var CONFIG     = require('./config');
 // Create DocumentDB connection
-var connection = new (require('documentdb').DocumentClient)(CONFIG.HOST, CONFIG.OPTIONS);
-// Pass connection and database-name(<= auto-creating, e.g: `findOrCreate`)
+var connection = new (require('documentdb').DocumentClient)(HOST, OPTIONS);
+// Pass connection and database-name, if `test` is not exist it will create one.
 var db = new DoQmentDB(connection, 'test');
 // Create a CollectionManager instance, if `users` is not exist it will create one.
 var users = db.use('users');
 
-// Each http function returns a Promise with two specific methods: success and error.
+// Each http function returns a `Promise` with two specific methods: success and error.
 users.create({ name: '6534' })
   .then(console.log);
   
