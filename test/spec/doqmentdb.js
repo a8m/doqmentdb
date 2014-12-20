@@ -1,36 +1,22 @@
 'use strict';
-/*global beforeEach, afterEach, stub*/
+/*global describe, it, beforeEach, afterEach, stub*/
 var DocumentDB = require('documentdb').DocumentClient;
-var DoQmentDB  = require('..');
+var DoQmentDB  = require('../../');
 var stub       = require('sinon').stub;
 var should     = require('should');
 var Promise    = require('bluebird');
 
-
-// Helpers: Mocks, and DocumentDB behavior
-var DB_MOCK   = { _self: '/self/db',  _colls: '/colls' };
-var COLL_MOCK = { _self: '/self/col', _docs:  '/docs'  };
-var DOC_MOCK  = { _self: '/self/doc', _id:    '54123'  };
-function toArray(args) {
-  return { toArray: function(fb) { fb.apply(null, args);} }
-}
-function applyCallback(o1, o2, cb) { return (cb||o2)() }
-
-// Assertions helpers
-function assertCalled(q, done, toCalled, withArgs) {
-  q.then(function(res) {
-    (toCalled.called).should.eql(true);
-    // Test `calledWith` with the given arguments.
-    if(withArgs) {
-      toCalled.calledWith.apply(toCalled, withArgs).should.eql(true);
-    }
-    done();
-  });
-}
-
 describe('DoqmentDB', function() {
+  // Helpers: Mocks, and DocumentDB behavior
+  var _             = require('../helpers');
+  var applyCallback = _.applyCallback;
+  var toArray       = _.toArray;
+  var assertCalled  = _.assertCalled;
+  var DB_MOCK       = _.MOCK.DB;
+  var COLL_MOCK     = _.MOCK.COLL;
+  var DOC_MOCK      = _.MOCK.DOC;
+  
   describe('DatabaseManager', function() {
-
     describe('creating `new` DatabaseManager', function() {
       it('should get a not DocumentDB instance(connection) and throw', function() {
         (function() {
@@ -391,7 +377,7 @@ describe('DoqmentDB', function() {
 
     describe('@private', function() {
       describe('Manager', function() {
-        var Manager = require('../lib/manager');
+        var Manager = require('../../lib/manager');
         it('should accept only DocumentDB instances as an argument', function() {
           (function() {
             new Manager({});
@@ -404,7 +390,7 @@ describe('DoqmentDB', function() {
       });
 
       describe('utils', function() {
-        var _ = require('../lib/utils');
+        var _ = require('../../lib/utils');
         describe('.type()', function() {
           it('should return the type of the given db object', function() {
             _.type(DB_MOCK).should.eql('Database');
