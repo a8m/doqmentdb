@@ -155,6 +155,7 @@ users.getCollection()
 ##find
 get object properties and return array of results.  
 **Usage:** `users.find(object)`  
+**Note:** to return all collections, omit params argument or pass an empty object({}).  
 **Returns:** `Array`
 ```js
 users.find({ active: true })
