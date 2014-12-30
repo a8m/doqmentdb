@@ -15,7 +15,7 @@ describe('DoqmentDB', function() {
   var DB_MOCK       = _.MOCK.DB;
   var COLL_MOCK     = _.MOCK.COLL;
   var DOC_MOCK      = _.MOCK.DOC;
-  
+
   describe('DatabaseManager', function() {
     describe('creating `new` DatabaseManager', function() {
       it('should get a not DocumentDB instance(connection) and throw', function() {
