@@ -16,6 +16,6 @@ users.schema({
 //users.find({})
 //  .then(console.log)
 
-users.findAndModify({ name: 'foo' }, { name: 'fo1' })
+users.create({ name: 'fo2' })
   .then(console.log)
   .catch(console.log)
