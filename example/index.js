@@ -8,11 +8,11 @@ var users = db.use('users');
 users.schema({
   name: {
     type: String,
-    regex: /^/,
+    regex: /^[a-zA-Z0-9|/d]{3,}$/,
     expose: true
   }
 });
 
 
-users.find({})
+users.create({ name: 'Ar3' })
   .then(console.log);
