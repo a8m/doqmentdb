@@ -29,7 +29,7 @@
     "sinon": "^1.10.3"
   },
   "scripts": {
-    "test": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -u exports test/spec/*"
+    "test": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -u exports test/spec/**/*"
   },
   "license": "MIT"
 }
