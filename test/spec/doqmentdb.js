@@ -388,32 +388,6 @@ describe('DoqmentDB', function() {
           }).should.not.throw();
         });
       });
-
-      describe('utils', function() {
-        var _ = require('../../lib/utils');
-        describe('.type()', function() {
-          it('should return the type of the given db object', function() {
-            _.type(DB_MOCK).should.eql('Database');
-            _.type(COLL_MOCK).should.eql('Collection');
-            _.type(DOC_MOCK).should.eql('Document');
-            // typeof
-            _.type({}).should.eql('object');
-          });
-        });
-
-        describe('.isDefined()', function() {
-          it('should test if the given value is defined', function() {
-            _.isDefined({}).should.eql(true);
-            _.isDefined(undefined).should.eql(false);
-          });
-        });
-
-        describe('.isDocument()', function() {
-          it('should test if the given object is Document', function() {
-            _.isDocument(DOC_MOCK).should.eql(true);
-          });
-        });
-      });
     });
 
   });
