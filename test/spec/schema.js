@@ -18,7 +18,13 @@ describe('SchemaService', function() {
     describe('missing required fields in schema', function() {
       it('should throw', function() {
         (function(){
-          Schema.isValidSchema({ name: { type:   String  } });
+          Schema.isValidSchema({ name: { type: String  } });
+        }).should.throw();
+
+        (function(){
+          Schema.isValidSchema({
+            name: { regex: /^/, expose: false, fixture: 21, type: String }
+          });
         }).should.throw();
       });
     });
