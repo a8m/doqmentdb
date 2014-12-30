@@ -3,7 +3,7 @@ var DoQmentDB  = require('..');
 var CONFIG     = require('../config');
 var connection = new (require('documentdb').DocumentClient)(CONFIG.HOST, CONFIG.OPTIONS);
 
-var db = new DoQmentDB(connection, 'compliance-proxy');
+var db = new DoQmentDB(connection, CONFIG.DB);
 var users = db.use('users');
 users.schema({
   name: {
@@ -13,6 +13,9 @@ users.schema({
   }
 });
 
+//users.find({})
+//  .then(console.log)
 
-users.create({ name: 'Ar3' })
-  .then(console.log);
+users.findAndModify({ name: 'foo' }, { name: 'fo1' })
+  .then(console.log)
+  .catch(console.log)
