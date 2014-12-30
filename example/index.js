@@ -10,11 +10,6 @@ users.schema({
     type: String,
     regex: /^[a-zA-Z0-9|/d]{3,}$/,
     expose: true
-  },
-  phone: {
-    type: Number,
-    regex: /^[a-zA-Z0-9|/d]{3,}$/,
-    expose: true
   }
 });
 
