@@ -10,12 +10,17 @@ users.schema({
     type: String,
     regex: /^[a-zA-Z0-9|/d]{3,}$/,
     expose: true
+  },
+  phone: {
+    type: Number,
+    regex: /^[a-zA-Z0-9|/d]{3,}$/,
+    expose: true
   }
 });
 
-//users.find({})
-//  .then(console.log)
-
-users.create({ name: 'fo2' })
+users.find({})
   .then(console.log)
-  .catch(console.log)
+//
+//users.create({ name: 'fo2', phone: 2113 })
+//  .then(console.log)
+//  .catch(console.log)
