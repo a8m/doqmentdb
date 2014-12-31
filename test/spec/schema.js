@@ -64,6 +64,14 @@ describe('SchemaService', function() {
           schema.omit({ name: 'Ariel', phone: 32 }).should.eql({ name: 'Ariel' });
         });
       });
+
+      describe('test.update()', function() {
+        it('should return a promise', function(done) {
+          var then = schema.test.update({});
+          then.should.be.type('function');
+          done();
+        });
+      });
     });
   });
 });
