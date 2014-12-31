@@ -5,7 +5,7 @@
 [![Dependency Status][david-image]][david-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
-> DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users.
+> DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users(supporting schema).
 
 ##Table of contents:
 - [Get Started](#get-started)
