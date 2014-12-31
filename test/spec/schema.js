@@ -51,8 +51,8 @@ describe('SchemaService', function() {
 
     describe('schema API', function() {
       var schema = Schema.factory({
-        name: { type: String, regex: /^/, expose: true  },
-        phone: { type: Number, regex: /^/, expose: false }
+        name: { type: String, regex: /^/, expose: true, fixture: '2132' },
+        phone: { type: Number, regex: /^/, expose: false, fixture: 123 }
       });
       describe('.omit()', function() {
         it('should get undefined/null/nutFound value and return it as-is', function() {
@@ -85,6 +85,32 @@ describe('SchemaService', function() {
         it('should catch and return the errs', function(done) {
           var o1 = { name: undefined };
           schema.test.update(o1)
+            .catch(function(err) {
+              err.constructor.should.eql(Error);
+              done();
+            });
+        });
+      });
+
+      describe('test.create()', function() {
+        it('should return a promise', function(done) {
+          var then = schema.test.create({});
+          then.should.be.type('object');
+          then.should.have.property('then').which.is.a.Function;
+          done();
+        });
+
+        it('should return the fixture values', function(done) {
+          schema.test.create({})
+            .then(function(data) {
+              data.should.eql({ name: '2132', phone: 123 });
+              done();
+            });
+        });
+
+        it('should catch and return the errs', function(done) {
+          var o1 = { name: 123 };
+          schema.test.create(o1)
             .catch(function(err) {
               err.constructor.should.eql(Error);
               done();
