@@ -48,5 +48,22 @@ describe('SchemaService', function() {
     it('should return an object', function() {
       Schema.factory({}).should.be.type('object');
     });
+
+    describe('schema API', function() {
+      var schema = Schema.factory({
+        name: { type: String, regex: /^/, expose: true  },
+        phone: { type: Number, regex: /^/, expose: false }
+      });
+      describe('.omit()', function() {
+        it('should get undefined/null/nutFound value and return it as-is', function() {
+          should(schema.omit(undefined)).eql(undefined);
+          should(schema.omit(null)).eql(null);
+        });
+
+        it('should omit unexposed fields', function() {
+          schema.omit({ name: 'Ariel', phone: 32 }).should.eql({ name: 'Ariel' });
+        });
+      });
+    });
   });
 });
