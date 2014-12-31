@@ -72,6 +72,24 @@ describe('SchemaService', function() {
           then.should.have.property('then').which.is.a.Function;
           done();
         });
+
+        it('should return the model as-is if valid', function(done) {
+          var o1 = { name: 'Ariel' };
+          schema.test.update(o1)
+            .then(function(o2) {
+              o2.should.eql(o1);
+              done();
+            });
+        });
+
+        it('should catch and return the errs', function(done) {
+          var o1 = { name: undefined };
+          schema.test.update(o1)
+            .catch(function(err) {
+              err.constructor.should.eql(Error);
+              done();
+            });
+        });
       });
     });
   });
