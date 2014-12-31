@@ -68,7 +68,8 @@ describe('SchemaService', function() {
       describe('test.update()', function() {
         it('should return a promise', function(done) {
           var then = schema.test.update({});
-          then.should.be.type('function');
+          then.should.be.type('object');
+          then.should.have.property('then').which.is.a.Function;
           done();
         });
       });
