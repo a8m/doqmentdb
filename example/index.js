@@ -14,8 +14,4 @@ users.schema({
 });
 
 users.find({})
-  .then(console.log)
-//
-//users.create({ name: 'fo2', phone: 2113 })
-//  .then(console.log)
-//  .catch(console.log)
+  .then(console.log);
