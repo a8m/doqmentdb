@@ -11,17 +11,19 @@ describe('SchemaService', function() {
 
     describe('getting invalid parameters', function() {
       it('should throw', function() {
-        should(Schema.isValidSchema({})).throw();
+        (function() {
+          Schema.isValidSchema({ name: {} });
+        }).should.throw();
       });
     });
 
     describe('missing required fields in schema', function() {
       it('should throw', function() {
-        (function(){
+        (function() {
           Schema.isValidSchema({ name: { type: String  } });
         }).should.throw();
 
-        (function(){
+        (function() {
           Schema.isValidSchema({
             name: { regex: /^/, expose: false, fixture: 21, type: String }
           });
