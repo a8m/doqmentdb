@@ -361,6 +361,16 @@ describe('DoqmentDB', function() {
           });
         });
 
+        describe('Schema', function() {
+          var users = dbManager.use('users');
+          users.schema({
+            name: { type: String, expose: true, regex: /^/ }
+          });
+          it('should set the schema on the CollectionManager', function() {
+            users._schema.should.be.type('object');
+          });
+        });
+
         afterEach(function() {
           readStub.restore();
           queryStub.restore();
