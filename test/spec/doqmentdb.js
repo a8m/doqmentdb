@@ -2,7 +2,9 @@
 /*global describe, it, beforeEach, afterEach, stub*/
 var DocumentDB = require('documentdb').DocumentClient;
 var DoQmentDB  = require('../../');
-var stub       = require('sinon').stub;
+var sinon      = require('sinon');
+var stub       = sinon.stub;
+var spy        = sinon.spy;
 var should     = require('should');
 var Promise    = require('bluebird');
 
@@ -187,6 +189,7 @@ describe('DoqmentDB', function() {
           queryStub = stub(DocumentDB.prototype, 'queryDocuments');
           queryStub.returns(toArray([null, [DOC_MOCK]]));
           readStub.returns(toArray([null, [1, 2]]));
+          spy(users, 'emit');
         });
 
         describe('.getCollection()', function() {
@@ -242,6 +245,30 @@ describe('DoqmentDB', function() {
             assertCalled(users.findOneAndRemove({ id: 2 }), done, removeStub, [DOC_MOCK._self]);
           });
 
+          describe('#hooks', function() {
+            it('should call the `pre` hook before remove', function(done) {
+              var t = {fn:function(nxt){nxt();}};
+              var spyFn = spy(t, 'fn');
+              users.pre('remove', t.fn);
+              users.findOneAndRemove({}).then(function() {
+                spyFn.called.should.eql(true);
+                done();
+              });
+            });
+
+            it('should call `emit` after remove', function(done) {
+              var t = {fn:function(nxt){}};
+              var spyFn = spy(t, 'fn');
+              users.post('remove', t.fn);
+              users.findOneAndRemove({}).then(function(data) {
+                spyFn.calledWith(data).should.eql(true);
+                users.emit.called.should.eql(true);
+                done();
+              });
+            });
+          });
+
+
           afterEach(function() {
             removeStub.restore();
           });
@@ -256,6 +283,29 @@ describe('DoqmentDB', function() {
           it('should get the first result and call `replaceDocument` extened', function(done) {
             var update = users.findOneAndModify({ id: 2 }, { name: 3 });
             assertCalled(update, done, updateStub, [DOC_MOCK._self]);
+          });
+
+          describe('#hooks', function() {
+            it('should call the `pre` hook before updating', function(done) {
+              var t = {fn:function(nxt){nxt();}};
+              var spyFn = spy(t, 'fn');
+              users.pre('update', t.fn);
+              users.findOneAndModify({}, {}).then(function() {
+                spyFn.called.should.eql(true);
+                done();
+              });
+            });
+
+            it('should call `emit` after updating', function(done) {
+              var t = {fn:function(nxt){}};
+              var spyFn = spy(t, 'fn');
+              users.post('update', t.fn);
+              users.findOneAndModify({}, {}).then(function(data) {
+                spyFn.calledWith(data).should.eql(true);
+                users.emit.called.should.eql(true);
+                done();
+              });
+            });
           });
 
           afterEach(function() {
@@ -276,6 +326,29 @@ describe('DoqmentDB', function() {
           it('should get an object params and call `createDocument` with it', function(done) {
             var o1 = { id: 1, name: 'Ariel M.' };
             assertCalled(users.create(o1), done, createStub, [COLL_MOCK._self, o1]);
+          });
+
+          describe('#hooks', function() {
+            it('should call the `pre` hook before insertion', function(done) {
+              var t = {fn:function(nxt){nxt();}};
+              var spyFn = spy(t, 'fn');
+              users.pre('save', t.fn);
+              users.create('foo').then(function() {
+                spyFn.called.should.eql(true);
+                done();
+              });
+            });
+
+            it('should call `emit` after insertion', function(done) {
+              var t = {fn:function(nxt){}};
+              var spyFn = spy(t, 'fn');
+              users.post('save', t.fn);
+              users.create('foo').then(function(data) {
+                spyFn.calledWith(data).should.eql(true);
+                users.emit.called.should.eql(true);
+                done();
+              });
+            });
           });
 
           afterEach(function() {
@@ -304,6 +377,29 @@ describe('DoqmentDB', function() {
                 });
             });
 
+            describe('#hooks', function() {
+              it('should call the `pre` hook before remove', function(done) {
+                var t = {fn:function(nxt){nxt();}};
+                var spyFn = spy(t, 'fn');
+                users.pre('remove', t.fn);
+                users.findAndRemove({}).then(function() {
+                  spyFn.called.should.eql(true);
+                  done();
+                });
+              });
+
+              it('should call `emit` after remove', function(done) {
+                var t = {fn:function(nxt){}};
+                var spyFn = spy(t, 'fn');
+                users.post('remove', t.fn);
+                users.findAndRemove({}).then(function(data) {
+                  spyFn.calledWith(data).should.eql(true);
+                  users.emit.called.should.eql(true);
+                  done();
+                });
+              });
+            });
+
             afterEach(function() {
               removeStub.restore();
             });
@@ -326,6 +422,29 @@ describe('DoqmentDB', function() {
 
             it('should have an aliases `update`', function() {
               users.update.should.eql(users.findAndModify);
+            });
+
+            describe('#hooks', function() {
+              it('should call the `pre` hook before updating', function(done) {
+                var t = {fn:function(nxt){nxt();}};
+                var spyFn = spy(t, 'fn');
+                users.pre('update', t.fn);
+                users.update({}, {}).then(function() {
+                  spyFn.called.should.eql(true);
+                  done();
+                });
+              });
+
+              it('should call `emit` after updating', function(done) {
+                var t = {fn:function(nxt){}};
+                var spyFn = spy(t, 'fn');
+                users.post('update', t.fn);
+                users.update({}, {}).then(function(data) {
+                  spyFn.calledWith(data).should.eql(true);
+                  users.emit.called.should.eql(true);
+                  done();
+                });
+              });
             });
 
             afterEach(function() {
@@ -374,6 +493,7 @@ describe('DoqmentDB', function() {
         afterEach(function() {
           readStub.restore();
           queryStub.restore();
+          users.emit.restore();
         });
       });
 
