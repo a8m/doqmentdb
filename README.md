@@ -33,6 +33,8 @@
   - [update](#findandmodify)
 - [Schema](#schema)
 - [Middleware](#middleware)
+  - [pre](#pre)
+  - [post](#post)
 
 #Get Started
 **(1)** You can install **DoQmentDB** using 2 different methods:  
@@ -341,6 +343,48 @@ users.find({})
  */
 ```
 see: [How to architect your models](https://github.com/a8m/doqmentdb/tree/master/example/users/model)
+
+#Middleware
+Middleware/Hooks are executed at the document level(`create`/`save`/`insert`, `update`, `remove/delete`).  
+There are two types of middleware, `pre` and `post`.  
+
+##pre
+**Usage:** `users.pre(operation, callback)`
+**Note:** `pre` middleware are executed one after another, when each middleware calls next.  
+**Example:** 
+```js
+users.pre('save', function(next) {
+  var doc = this;
+  doc.createdAt = new Date().toString();
+  next();
+}, function(next) {
+  var doc = this;
+  doc.updatedAt = new Date().toString();
+  next();
+});
+
+// Do something async
+users.pre('save', function(next) {
+  var doc = this;
+  bcrypt.genSalt(10, function(err, salt) {
+    bcrypt.hash(doc.password, salt, function(err, hash) {
+      doc.password = hash;
+      next();
+    });
+  });
+});
+// ##Note: the order is importatnt, this example order:
+// `createdAt()`, `updatedAT()`, `hash/bcrypt()`, and then the `.create` operation will called
+```
+##post
+**Usage:** `users.post(operation, callback)`  
+**Note:** `post` middleware are executed in parallel.  
+**Example:** 
+```js
+users.post('save', function(doc) {
+  logger(new Date(), doc, 'saved!')
+});
+```
 
 [npm-image]: https://img.shields.io/npm/v/doqmentdb.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/doqmentdb
