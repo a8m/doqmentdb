@@ -54,6 +54,14 @@ var connection = new (require('documentdb').DocumentClient)(HOST, OPTIONS);
 var db = new DoQmentDB(connection, 'test');
 // Create a CollectionManager instance, if `users` is not exist it will create one.
 var users = db.use('users');
+// Using schema
+users.schema(model);
+// Add hooks(see `users` full example)
+users.pre('save', function(next) {
+  var doc = this;
+  doc.createdAt = new Date().toString();
+  next();
+});
 
 // Each http function returns a `Promise` with two specific methods: success and error.
 users.create({ name: '6534' })
