@@ -13,7 +13,6 @@ users.create({ password: 'Ar2!as_s'})
   .catch(console.log);
   /*
    [Error:
-   `name` must be type string, and least 3 chars,
    `email` must be type string, valid email address, and least 10 chars
    ]
    */
