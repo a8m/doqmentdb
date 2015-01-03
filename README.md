@@ -354,7 +354,7 @@ see: [How to architect your models](https://github.com/a8m/doqmentdb/tree/master
 
 #Middleware
 Middleware/Hooks are executed at the document level(`create`/`save`/`insert`, `update`, `remove/delete`).  
-There are two types of middleware, `pre` and `post`.  
+There are two types of middleware, **pre** and **post**.  
 
 ##pre
 **Usage:** `users.pre(operation, callback)`  
