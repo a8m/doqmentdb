@@ -5,7 +5,7 @@
 [![Dependency Status][david-image]][david-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
-> DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users(supporting schema).
+> DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users(with schema, hooks/middleware).
 
 ##Table of contents:
 - [Get Started](#get-started)
@@ -31,6 +31,8 @@
   - [findOneAndModify](#findoneandmodify)
   - [findOrCreate](#findorcreate-1)
   - [update](#findandmodify)
+- [Schema](#schema)
+- [Middleware](#middleware)
 
 #Get Started
 **(1)** You can install **DoQmentDB** using 2 different methods:  
@@ -222,6 +224,24 @@ get object properties, search for document, if it not exist create one.
 users.findOrCreate({ admin: false, name: 'Ariel' })
   .then(console.log);
 ```
+#Schema
+Manage your documents with schema.  
+**fields:**
+* `type`
+  *  ***required*** 
+  *  used for type comparing, (e.g: `String`, `Boolean`, `Number`, etc..).
+* `default` 
+  * ***optional***
+  * value fallback
+* `regex`
+  * ***optional***
+  * regex validation, (e.g: email validation - `/^[a-zA-Z0-9@:%_\+.~#?&//=|/d]{10,}$/`).
+* `error`
+  * ***optional***
+  * return message to fields that not fail in the validation phase(`regex`/`type`). see: [example](https://github.com/a8m/doqmentdb/tree/master/example/odm)
+* `expose`
+  * ***optional***
+  * `expose` by default is `true`, unless you set it to `false`, it's means that all the `find` operations returns the documents without exposing this fields. see: [example](https://github.com/a8m/doqmentdb/blob/master/example/users/model/users/schema.js#L42)
 
 [npm-image]: https://img.shields.io/npm/v/doqmentdb.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/doqmentdb
