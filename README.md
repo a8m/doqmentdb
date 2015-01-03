@@ -243,6 +243,105 @@ Manage your documents with schema.
   * ***optional***
   * `expose` by default is `true`, unless you set it to `false`, it's means that all the `find` operations returns the documents without exposing this fields. see: [example](https://github.com/a8m/doqmentdb/blob/master/example/users/model/users/schema.js#L42)
 
+**Example using schema:**  
+schema: `model.js`
+```js
+module.exports = {
+  /**
+   * @field name
+   * @default no default value
+   */
+  name: {
+    type: String,
+    'default': ''
+  },
+
+  /**
+   * @field email
+   * @default no default value
+   * @regex email, min-length = 10
+   */
+  email: {
+    type: String,
+    'default': '',
+    regex: /^[a-zA-Z0-9@:%_\+.~#?&//=|/d]{10,}$/,
+    error: '`email` must be type string, valid email address, and least 10 chars',
+    expose: true
+  },
+
+  /**
+   * @field password
+   * @default no default value
+   * @regex password
+   */
+  password: {
+    type: String,
+    'default': '',
+    regex: /^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/,
+    error: '`password` must be type string, contain 8 chars and at least one number, ' +
+      'one letter and one unique character such as !#$%&? "',
+    expose: false
+  },
+
+  /**
+   * @field isAdmin
+   * @default false
+   */
+  isAdmin: {
+    type: Boolean,
+    'default': false
+  }
+};
+```
+using schema(`model.js`)
+```js
+var DoQmentDB  = require('../..');              // In your app, you should use `require('doqmentdb')`
+var model      = require('./model');            // Get model/schema
+var connection = new (require('documentdb')     // Create DocumentDB connection
+.DocumentClient)(CONFIG.HOST, CONFIG.OPTIONS);
+
+var db = new DoQmentDB(connection, CONFIG.DB);  // Create DBManager 'test'
+var users = db.use('users');                    // Create CollectionManager 'users'
+users.schema(model);                            // Using schema
+
+users.create({ password: 'Ar2!as_s'})
+  .then(console.log)
+  .catch(console.log);
+  /*
+   [Error:
+   `email` must be type string, valid email address, and least 10 chars
+   ]
+   */
+
+users.create({ name: 'Ariel', email: 'ariel.com', password: 'Ar2!as_s'})
+  .then(console.log)
+  .catch(console.log);
+/*
+ [Error:
+ `email` must be type string, valid email address, and least 10 chars
+ ]
+ */
+
+users.create({ name: 'Ariel', email: 'a8m@gm.com', password: 'Ar2!as_s'})
+  .then(console.log)
+  .catch(console.log);
+/*
+ {
+   name: 'Ariel',
+   email: 'a8m@gm.com',
+   password: 'Ar2!as_s',
+   id: '2eb7...c0',
+    ...
+ }
+ */
+users.find({})
+  .then(console.log);
+/*
+ Get all documents but without exposing fields(i.e: omit `password` field)
+ */
+```
+see: [How to architect your models](https://github.com/a8m/doqmentdb/tree/master/example/users/model)
+
 [npm-image]: https://img.shields.io/npm/v/doqmentdb.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/doqmentdb
 [travis-image]: https://img.shields.io/travis/a8m/doqmentdb.svg?style=flat-square
