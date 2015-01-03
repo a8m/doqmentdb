@@ -305,7 +305,7 @@ module.exports = {
 ```
 using schema(`model.js`)
 ```js
-var DoQmentDB  = require('../..');              // In your app, you should use `require('doqmentdb')`
+var DoQmentDB  = require('doqmentdb');          
 var model      = require('./model');            // Get model/schema
 var connection = new (require('documentdb')     // Create DocumentDB connection
 .DocumentClient)(CONFIG.HOST, CONFIG.OPTIONS);
