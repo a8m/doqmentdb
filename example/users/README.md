@@ -1,2 +1,2 @@
 #Example
-> Express application with schema, and hooks/middleware.
+> Express application with schema and hooks/middleware.
