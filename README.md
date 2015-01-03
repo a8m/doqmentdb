@@ -248,7 +248,7 @@ Manage your documents with schema.
   * regex validation, (e.g: email validation - `/^[a-zA-Z0-9@:%_\+.~#?&//=|/d]{10,}$/`).
 * `error`
   * ***optional***
-  * return message to fields that not fail in the validation phase(`regex`/`type`). see: [example](https://github.com/a8m/doqmentdb/tree/master/example/odm)
+  * return message to fields that fail in the validation phase(`regex`/`type`). see: [example](https://github.com/a8m/doqmentdb/tree/master/example/odm)
 * `expose`
   * ***optional***
   * `expose` by default is `true`, unless you set it to `false`, it's means that all the `find` operations returns the documents without exposing this fields. see: [example](https://github.com/a8m/doqmentdb/blob/master/example/users/model/users/schema.js#L42)
