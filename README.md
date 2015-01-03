@@ -357,7 +357,7 @@ Middleware/Hooks are executed at the document level(`create`/`save`/`insert`, `u
 There are two types of middleware, `pre` and `post`.  
 
 ##pre
-**Usage:** `users.pre(operation, callback)`
+**Usage:** `users.pre(operation, callback)`  
 **Note:** `pre` middleware are executed one after another, when each middleware calls next.  
 **Example:** 
 ```js
