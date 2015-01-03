@@ -38,5 +38,14 @@ module.exports = {
     error: '`password` must be type string, contain 8 chars and at least one number, ' +
       'one letter and one unique character such as !#$%&? "',
     expose: false
+  },
+
+  /**
+   * @field isAdmin
+   * @default false
+   */
+  isAdmin: {
+    type: Boolean,
+    'default': false
   }
 };

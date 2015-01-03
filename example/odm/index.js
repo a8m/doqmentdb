@@ -29,6 +29,7 @@ users.create({ name: 'Ariel', email: 'ariel.com', password: 'Ar2!as_s'})
 users.create({ name: 'Ariel', email: 'a8m@gm.com', password: 'Ar2!as_s'})
   .then(console.log)
   .catch(console.log);
+
 /*
  {
    name: 'Ariel',
@@ -38,7 +39,6 @@ users.create({ name: 'Ariel', email: 'a8m@gm.com', password: 'Ar2!as_s'})
     ...
  }
  */
-
 users.find({})
   .then(console.log);
 /*
