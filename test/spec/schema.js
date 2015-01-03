@@ -21,11 +21,11 @@ describe('SchemaService', function() {
       it('should throw', function() {
         (function() {
           Schema.isValidSchema({ name: { type: String  } });
-        }).should.throw();
+        }).should.not.throw();
 
         (function() {
           Schema.isValidSchema({
-            name: { regex: /^/, expose: false, fixture: 21, type: String }
+            name: { regex: /^/, expose: false, 'default': 21, type: String }
           });
         }).should.throw();
       });
@@ -53,8 +53,8 @@ describe('SchemaService', function() {
 
     describe('schema API', function() {
       var schema = Schema.factory({
-        name: { type: String, regex: /^/, expose: true, fixture: '2132' },
-        phone: { type: Number, regex: /^/, expose: false, fixture: 123 }
+        name: { type: String, regex: /^/, expose: true, 'default': '2132' },
+        phone: { type: Number, regex: /^/, expose: false, 'default': 123 }
       });
       describe('.omit()', function() {
         it('should get undefined/null/nutFound value and return it as-is', function() {
