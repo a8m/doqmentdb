@@ -1,7 +1,8 @@
 'use strict';
 /*global describe, it, beforeEach, afterEach, stub*/
 var should = require('should')
-  , query  = require('../../lib/query');
+  , query  = require('../../lib/query')
+  , constant = require('../../lib/query/constant').QUERIES;
 
 describe('QueryBuilder', function() {
   describe('test .query() behavior', function() {
@@ -74,13 +75,28 @@ describe('QueryBuilder', function() {
     });
 
     it('should work with functions', function() {
-      query({ coins: { $in: 2 } }).should.eql('inUDF(r.coins, 2)');
-      query({ coins: { $nin: 2 } }).should.eql('NOT(inUDF(r.coins, 2))');
-      query({ $not: { coins: { $in: 2 } } }).should.eql(query({ coins: { $nin: 2 } }));
-      query({ name: { $type: 'string' } }).should.eql('typeUDF(r.name, "string")');
+      query({ coins: { $in: 2 } }).should.eql({
+        query: 'inUDF(r.coins, 2)',
+        udf: [ { id: constant.$in.name, body: constant.$in.func } ]
+      });
+      // that's how you should do the `{ coins: { $nin: 2 } }`
+      query({ $not: { coins: { $in: 2 } } }).should.eql({
+        query: 'NOT(inUDF(r.coins, 2))',
+        udf: [ { id: constant.$in.name, body: constant.$in.func } ]
+      });
+      query({ name: { $type: 'string' } }).should.eql({
+        query: 'typeUDF(r.name, "string")',
+        udf: [{ id: constant.$type.name, body: constant.$type.func } ]
+      });
 
-      query({ $not: { name: { $regex: /d+/g } } }).should.eql('NOT(regexUDF(r.name, /d+/g))');
-      query({ $not: { age: { $type: 'number' } } }).should.eql('NOT(typeUDF(r.age, "number"))');
+      query({ $not: { name: { $regex: /d+/g } } }).should.eql({
+        query: 'NOT(regexUDF(r.name, /d+/g))',
+        udf: [ { id: constant.$regex.name, body: constant.$regex.func } ]
+      });
+      query({ $not: { age: { $type: 'number' } } }).should.eql({
+        query: 'NOT(typeUDF(r.age, "number"))',
+        udf: [{ id: constant.$type.name, body: constant.$type.func }]
+      });
     });
 
     it('should throw if it\'s invalid operator', function() {
@@ -92,7 +108,6 @@ describe('QueryBuilder', function() {
 });
 
 describe('constants', function() {
-  var constant = require('../../lib/query/constant').QUERIES;
   describe('test UDF functions', function() {
     it('.$in()', function() {
       constant.$in.func([1,2,3], 2).should.eql(true);
