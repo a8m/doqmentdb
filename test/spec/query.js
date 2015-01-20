@@ -5,36 +5,37 @@ var should = require('should')
   , constant = require('../../lib/query/constant').QUERIES;
 
 describe('QueryBuilder', function() {
+  var BQ = 'SELECT * FROM root r WHERE ';
   describe('test .query() behavior', function() {
     it('simple equal', function() {
-      query({ a: 1, b: 2, c: 3 }).should.eql('r.a=1 AND r.b=2 AND r.c=3');
-      query({ a: "1", b: "2", c: "3" }).should.eql('r.a="1" AND r.b="2" AND r.c="3"');
+      query({ a: 1, b: 2, c: 3 }).should.eql(BQ + 'r.a=1 AND r.b=2 AND r.c=3');
+      query({ a: "1", b: "2", c: "3" }).should.eql(BQ + 'r.a="1" AND r.b="2" AND r.c="3"');
     });
 
     it('simple equal with $not', function() {
-      query({ $not: { a: 1, b: 2, c: 3 } }).should.eql('NOT(r.a=1 AND r.b=2 AND r.c=3)');
-      query({ $not: { a: "1", b: "2", c: "3" } }).should.eql('NOT(r.a="1" AND r.b="2" AND r.c="3")');
+      query({ $not: { a: 1, b: 2, c: 3 } }).should.eql(BQ + 'NOT(r.a=1 AND r.b=2 AND r.c=3)');
+      query({ $not: { a: "1", b: "2", c: "3" } }).should.eql(BQ + 'NOT(r.a="1" AND r.b="2" AND r.c="3")');
     });
 
     it('should work with $not-$or as $nor', function() {
-      query({ $not: { $or: [ { a: 1 } ] } }).should.eql('NOT(r.a=1)');
-      query({ $not: { $or: [ { a: 1, b: 1 }, { c: 3 } ] } }).should.eql('NOT((r.a=1 AND r.b=1) OR r.c=3)');
-      query({ $nor: [ { a: 1, b: 1 }, { c: 3 } ] }).should.eql('NOT((r.a=1 AND r.b=1) OR r.c=3)');
+      query({ $not: { $or: [ { a: 1 } ] } }).should.eql(BQ + 'NOT(r.a=1)');
+      query({ $not: { $or: [ { a: 1, b: 1 }, { c: 3 } ] } }).should.eql(BQ + 'NOT((r.a=1 AND r.b=1) OR r.c=3)');
+      query({ $nor: [ { a: 1, b: 1 }, { c: 3 } ] }).should.eql(BQ + 'NOT((r.a=1 AND r.b=1) OR r.c=3)');
     });
 
     it('should with $nor', function() {
-      query({ $nor: [ { a: 1 }, { b: 3 }]}).should.eql('NOT(r.a=1 OR r.b=3)');
-      query({ $nor: [ { a: '1' }, { b: '3' }]}).should.eql('NOT(r.a="1" OR r.b="3")');
-      query({ $nor: [ { a: '1' }]}).should.eql('NOT(r.a="1")');
-      query({ $nor: [ { a: 1, b: 2 }, { c: 4 }]}).should.eql('NOT((r.a=1 AND r.b=2) OR r.c=4)');
+      query({ $nor: [ { a: 1 }, { b: 3 }]}).should.eql(BQ + 'NOT(r.a=1 OR r.b=3)');
+      query({ $nor: [ { a: '1' }, { b: '3' }]}).should.eql(BQ + 'NOT(r.a="1" OR r.b="3")');
+      query({ $nor: [ { a: '1' }]}).should.eql(BQ + 'NOT(r.a="1")');
+      query({ $nor: [ { a: 1, b: 2 }, { c: 4 }]}).should.eql(BQ + 'NOT((r.a=1 AND r.b=2) OR r.c=4)');
     });
 
     it('should work with $and and $or operators together', function() {
-      query({ $and: [{ a: 2, b: 3}, { c: 3 }] }).should.eql('((r.a=2 AND r.b=3) AND r.c=3)');
-      query({ $or: [{ a: 2, b: 3}, { c: 3 }] }).should.eql('((r.a=2 AND r.b=3) OR r.c=3)');
+      query({ $and: [{ a: 2, b: 3}, { c: 3 }] }).should.eql(BQ + '((r.a=2 AND r.b=3) AND r.c=3)');
+      query({ $or: [{ a: 2, b: 3}, { c: 3 }] }).should.eql(BQ + '((r.a=2 AND r.b=3) OR r.c=3)');
 
-      query({ $or: [{ a: 2 }, { $and: [{ a: 1 }, { b: 2 }] }] }).should.eql('(r.a=2 OR (r.a=1 AND r.b=2))');
-      query({ $and: [{ a: 2 }, { $or: [{ a: 1 }, { b: 2 }] }] }).should.eql('(r.a=2 AND (r.a=1 OR r.b=2))');
+      query({ $or: [{ a: 2 }, { $and: [{ a: 1 }, { b: 2 }] }] }).should.eql(BQ + '(r.a=2 OR (r.a=1 AND r.b=2))');
+      query({ $and: [{ a: 2 }, { $or: [{ a: 1 }, { b: 2 }] }] }).should.eql(BQ + '(r.a=2 AND (r.a=1 OR r.b=2))');
 
       // recursive
       query({ $and: [
@@ -42,16 +43,16 @@ describe('QueryBuilder', function() {
         { $or: [ { a: 2 }, { b: 2 },
           { $and: [ { a: 1 }, { b: 1 } ] }
         ]}
-      ]}).should.eql('(r.a=1 AND (r.a=2 OR r.b=2 OR (r.a=1 AND r.b=1)))')
+      ]}).should.eql(BQ + '(r.a=1 AND (r.a=2 OR r.b=2 OR (r.a=1 AND r.b=1)))')
     });
 
     it('should work with symbols($gt, $gte, etc..)', function() {
-      query({ $not: { name: { $gt: 3 }, age: 12 } }).should.eql('NOT(r.name > 3 AND r.age=12)');
-      query({ $not: { name: { $ne: 'bar' } } }).should.eql('NOT(r.name <> "bar")');
+      query({ $not: { name: { $gt: 3 }, age: 12 } }).should.eql(BQ + 'NOT(r.name > 3 AND r.age=12)');
+      query({ $not: { name: { $ne: 'bar' } } }).should.eql(BQ + 'NOT(r.name <> "bar")');
       query({ $or: [
         { $not: { a: 2 } },
         { $not: { b: { $ne: 1 } } }
-      ]}).should.eql('(NOT(r.a=2) OR NOT(r.b <> 1))');
+      ]}).should.eql(BQ + '(NOT(r.a=2) OR NOT(r.b <> 1))');
 
       query({ $or: [
         { name: { $ne: 'Ariel' } },
@@ -60,7 +61,7 @@ describe('QueryBuilder', function() {
           { isAdmin: { $ne: false } },
           { isUser: { $ne: false } }
         ]}
-      ]}).should.eql('(r.name <> "Ariel" OR r.age <= 26 OR (r.isAdmin <> false AND r.isUser <> false))');
+      ]}).should.eql(BQ + '(r.name <> "Ariel" OR r.age <= 26 OR (r.isAdmin <> false AND r.isUser <> false))');
 
       query({ $or: [
         { $not: { name: { $ne: 'Ariel' } } },
@@ -71,30 +72,34 @@ describe('QueryBuilder', function() {
             { isUser: { $ne: false } }
           ]}
         }
-      ]}).should.eql('(NOT(r.name <> "Ariel") OR NOT(r.age <= 26) OR NOT(r.isAdmin <> false AND r.isUser <> false))');
+      ]}).should.eql(BQ + '(NOT(r.name <> "Ariel") OR NOT(r.age <= 26) OR NOT(r.isAdmin <> false AND r.isUser <> false))');
+    });
+
+    it('should handle strings correctly', function() {
+      query('r.a=1 AND r.b=2').should.eql(BQ + 'r.a=1 AND r.b=2');
     });
 
     it('should work with functions', function() {
       query({ coins: { $in: 2 } }).should.eql({
-        query: 'inUDF(r.coins, 2)',
+        query: BQ + 'inUDF(r.coins, 2)',
         udf: [ { id: constant.$in.name, body: constant.$in.func } ]
       });
       // that's how you should do the `{ coins: { $nin: 2 } }`
       query({ $not: { coins: { $in: 2 } } }).should.eql({
-        query: 'NOT(inUDF(r.coins, 2))',
+        query: BQ + 'NOT(inUDF(r.coins, 2))',
         udf: [ { id: constant.$in.name, body: constant.$in.func } ]
       });
       query({ name: { $type: 'string' } }).should.eql({
-        query: 'typeUDF(r.name, "string")',
+        query: BQ + 'typeUDF(r.name, "string")',
         udf: [{ id: constant.$type.name, body: constant.$type.func } ]
       });
 
       query({ $not: { name: { $regex: /d+/g } } }).should.eql({
-        query: 'NOT(regexUDF(r.name, /d+/g))',
+        query: BQ + 'NOT(regexUDF(r.name, /d+/g))',
         udf: [ { id: constant.$regex.name, body: constant.$regex.func } ]
       });
       query({ $not: { age: { $type: 'number' } } }).should.eql({
-        query: 'NOT(typeUDF(r.age, "number"))',
+        query: BQ + 'NOT(typeUDF(r.age, "number"))',
         udf: [{ id: constant.$type.name, body: constant.$type.func }]
       });
     });

@@ -1,22 +1,22 @@
 'use strict';
 /*global describe, it, beforeEach, afterEach, stub*/
-var DocumentDB = require('documentdb').DocumentClient;
-var DoQmentDB  = require('../../');
-var sinon      = require('sinon');
-var stub       = sinon.stub;
-var spy        = sinon.spy;
-var should     = require('should');
-var Promise    = require('bluebird');
+var DocumentDB = require('documentdb').DocumentClient
+  , DoQmentDB  = require('../../')
+  , sinon      = require('sinon')
+  , stub       = sinon.stub
+  , spy        = sinon.spy
+  , should     = require('should')
+  , Promise    = require('bluebird');
 
 describe('DoqmentDB', function() {
   // Helpers: Mocks, and DocumentDB behavior
-  var _             = require('../helpers');
-  var applyCallback = _.applyCallback;
-  var toArray       = _.toArray;
-  var assertCalled  = _.assertCalled;
-  var DB_MOCK       = _.MOCK.DB;
-  var COLL_MOCK     = _.MOCK.COLL;
-  var DOC_MOCK      = _.MOCK.DOC;
+  var _             = require('../helpers')
+    , applyCallback = _.applyCallback
+    , toArray       = _.toArray
+    , assertCalled  = _.assertCalled
+    , DB_MOCK       = _.MOCK.DB
+    , COLL_MOCK     = _.MOCK.COLL
+    , DOC_MOCK      = _.MOCK.DOC;
 
   describe('DatabaseManager', function() {
     describe('creating `new` DatabaseManager', function() {
