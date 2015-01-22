@@ -215,6 +215,64 @@ describe('DoqmentDB', function() {
           it('should get object params and call `queryDocuments`', function(done) {
             assertCalled(users.find({ id: 12 }), done, queryStub);
           });
+
+          describe('UDF function', function() {
+            describe('get query with UDF', function() {
+              var findStub;
+              beforeEach(function() {
+                stub(DocumentDB.prototype, 'createUserDefinedFunction', function(self, udf, cb) {
+                  cb(null, {id: 'inUDF', body: 'function(){}'});
+                });
+                findStub = stub(DocumentDB.prototype, 'readUserDefinedFunctions');
+                findStub.returns(toArray([null, [{ id: 'inUDF', body: 'function(){}' }]]));
+              });
+
+              it('should call createUDF if if it not exist', function(done) {
+                assertCalled(users.find({ arr: { $all: 1 } }), done, queryStub);
+              });
+
+              it('should add udf(key,value) in-memory storage', function(done) {
+                users.find({ arr: { $all: 1 } })
+                  .then(function() {
+                    users.udf.should.not.eql({});
+                    done();
+                  });
+              });
+
+              it('should be cached and not call createUDF', function(done) {
+                users.find({ arr: { $in: 1 } })
+                  .then(function() {
+                    DocumentDB.prototype.createUserDefinedFunction.called.should.eql(false);
+                    done();
+                  });
+              });
+
+              it('should be cached and not call createUDF', function(done) {
+                users.find({ arr: { $in: 1 }, name: { $type: 'string' } })
+                  .then(function() {
+                    done();
+                  });
+              });
+
+              afterEach(function() {
+                DocumentDB.prototype.createUserDefinedFunction.restore();
+                findStub.restore();
+              });
+            });
+            // TODO(Ariel): refactor
+            describe('removeUDF', function() {
+              var deleteStub;
+              beforeEach(function() {
+                deleteStub = stub(DocumentDB.prototype, 'deleteUserDefinedFunction', function(self, cb) {
+                  return cb(undefined);
+                });
+              });
+
+              it('should delete udf', function(done) {
+                assertCalled(users.manager.removeUDF({ _self: 'foo' }), done, deleteStub);
+              });
+            });
+          });
         });
 
         describe('.fineOne', function() {
