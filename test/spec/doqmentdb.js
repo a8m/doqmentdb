@@ -1,22 +1,22 @@
 'use strict';
 /*global describe, it, beforeEach, afterEach, stub*/
-var DocumentDB = require('documentdb').DocumentClient;
-var DoQmentDB  = require('../../');
-var sinon      = require('sinon');
-var stub       = sinon.stub;
-var spy        = sinon.spy;
-var should     = require('should');
-var Promise    = require('bluebird');
+var DocumentDB = require('documentdb').DocumentClient
+  , DoQmentDB  = require('../../')
+  , sinon      = require('sinon')
+  , stub       = sinon.stub
+  , spy        = sinon.spy
+  , should     = require('should')
+  , Promise    = require('bluebird');
 
 describe('DoqmentDB', function() {
   // Helpers: Mocks, and DocumentDB behavior
-  var _             = require('../helpers');
-  var applyCallback = _.applyCallback;
-  var toArray       = _.toArray;
-  var assertCalled  = _.assertCalled;
-  var DB_MOCK       = _.MOCK.DB;
-  var COLL_MOCK     = _.MOCK.COLL;
-  var DOC_MOCK      = _.MOCK.DOC;
+  var _             = require('../helpers')
+    , applyCallback = _.applyCallback
+    , toArray       = _.toArray
+    , assertCalled  = _.assertCalled
+    , DB_MOCK       = _.MOCK.DB
+    , COLL_MOCK     = _.MOCK.COLL
+    , DOC_MOCK      = _.MOCK.DOC;
 
   describe('DatabaseManager', function() {
     describe('creating `new` DatabaseManager', function() {
@@ -214,6 +214,64 @@ describe('DoqmentDB', function() {
 
           it('should get object params and call `queryDocuments`', function(done) {
             assertCalled(users.find({ id: 12 }), done, queryStub);
+          });
+
+          describe('UDF function', function() {
+            describe('get query with UDF', function() {
+              var findStub;
+              beforeEach(function() {
+                stub(DocumentDB.prototype, 'createUserDefinedFunction', function(self, udf, cb) {
+                  cb(null, {id: 'inUDF', body: 'function(){}'});
+                });
+                findStub = stub(DocumentDB.prototype, 'readUserDefinedFunctions');
+                findStub.returns(toArray([null, [{ id: 'inUDF', body: 'function(){}' }]]));
+              });
+
+              it('should call createUDF if if it not exist', function(done) {
+                assertCalled(users.find({ arr: { $all: 1 } }), done, queryStub);
+              });
+
+              it('should add udf(key,value) in-memory storage', function(done) {
+                users.find({ arr: { $all: 1 } })
+                  .then(function() {
+                    users.udf.should.not.eql({});
+                    done();
+                  });
+              });
+
+              it('should be cached and not call createUDF', function(done) {
+                users.find({ arr: { $in: 1 } })
+                  .then(function() {
+                    DocumentDB.prototype.createUserDefinedFunction.called.should.eql(false);
+                    done();
+                  });
+              });
+
+              it('should be cached and not call createUDF', function(done) {
+                users.find({ arr: { $in: 1 }, name: { $type: 'string' } })
+                  .then(function() {
+                    done();
+                  });
+              });
+
+              afterEach(function() {
+                DocumentDB.prototype.createUserDefinedFunction.restore();
+                findStub.restore();
+              });
+            });
+            // TODO(Ariel): refactor
+            describe('removeUDF', function() {
+              var deleteStub;
+              beforeEach(function() {
+                deleteStub = stub(DocumentDB.prototype, 'deleteUserDefinedFunction', function(self, cb) {
+                  return cb(undefined);
+                });
+              });
+
+              it('should delete udf', function(done) {
+                assertCalled(users.manager.removeUDF({ _self: 'foo' }), done, deleteStub);
+              });
+            });
           });
         });
 

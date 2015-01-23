@@ -31,6 +31,7 @@
   - [findOneAndModify](#findoneandmodify)
   - [findOrCreate](#findorcreate-1)
   - [update](#findandmodify)
+- [Queries](#queries)
 - [Schema](#schema)
 - [Middleware](#middleware)
   - [pre](#pre)
@@ -234,6 +235,67 @@ get object properties, search for document, if it not exist create one.
 users.findOrCreate({ admin: false, name: 'Ariel' })
   .then(console.log);
 ```
+
+#Queries
+###Operators
+* Logical & Conjunctive: 
+  * `$or` OR
+  * `$and` AND
+  * `$not` NOT
+  * `$nor` NOT(... OR ...)
+* Comparison: 
+  * `$gt` >
+  * `$gte` >=
+  * `$lt` <
+  * `$lte` <=
+  * `$ne` <> or !=
+* UDF:
+  * `$in` like `Array.prototype.some(...)`
+  * `$all` like `Array.prototype.every(...)`
+  * `$type` `typeof value`
+  * `$regex` `new RegExp(...).test(value)`
+  * `$size` test `array.length`
+
+###Examples
+```js
+users.find({ a: 1, b: 2, c: '3' })
+// ... r WHERE r.a=1 AND r.b=2 AND r.c="3"
+
+users.find({ $or: [{ a: 2, b: 3}, { c: 3 }] })
+// ... r WHERE ((r.a=2 AND r.b=3) OR r.c=3)
+
+users.find({ $not: { a: 1, b: 2, c: 3 } })
+// ... r WHERE NOT(r.a=1 AND r.b=2 AND r.c=3)
+
+users.find({ $nor: [ { a: 1 }, { b: 3 }]})
+// ... r WHERE NOT(r.a=1 OR r.b=3)
+
+users.find({ $nor: [ { a: 1, b: 1 }, { c: 3 } ] })
+// ... r WHERE NOT((r.a=1 AND r.b=1) OR r.c=3)
+
+users.find({ $not: { name: { $gt: 3 }, age: 12 } })
+// ... r WHERE NOT(r.name > 3 AND r.age=12)
+
+users.find({ $not: { name: { $ne: 'bar' } } })
+// ... r WHERE NOT(r.name <> "bar")
+
+users.find({ $or: [
+        { name: { $ne: 'Ariel' } },
+        { age: { $lte: 26 } },
+        { $and: [
+          { isAdmin: { $ne: false } },
+          { isUser: { $ne: false } }
+        ]}
+      ]})
+// ... r WHERE r.name <> "Ariel" OR r.age <= 26 OR (r.isAdmin <> false AND r.isUser <> false)
+
+users.find({ coins: { $in: 2 } })
+// ... r WHERE inUDF(r.coins, 2)
+
+users.find({ $not: { age: { $type: 'number' } } })
+// ... r WHERE NOT(typeUDF(r.age, "number"))
+```
+
 #Schema
 Manage your documents with schema.  
 **fields:**
