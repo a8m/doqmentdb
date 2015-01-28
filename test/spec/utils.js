@@ -157,13 +157,37 @@ describe('utils', function() {
       _agileWrapper.forEach.called.should.eql(true);
     });
 
-    describe('.extends()', function() {
+    describe('.extend()', function() {
       describe('extending objects', function() {
-        // ...
+        it('should extends and override properties', function() {
+          _.extend({a:2}, {b:3}).should.eql({a:2, b:3});
+          _.extend({a:1}, {a:2, b:3}).should.eql({a:2, b:3});
+        });
+
+        it('should support multiple objects', function() {
+          _.extend({a:1}, {b:2}, {c:3}).should.eql({a:1, b:2, c:3});
+          _.extend({a:1}, {b:2}, {c:3}, {d:4}).should.eql({a:1, b:2, c:3, d:4});
+        });
       });
 
       describe('using operations', function() {
-        // ...
+        it('String', function() {
+          _.extend({ a: 'foo' }, { a: { $concat: 'bar' } }).should.eql({ a: 'foobar' });
+          _.extend({ a: 'foo' }, { a: { $substr: 1 } }).should.eql({ a: 'oo' });
+          _.extend({ a: 'foo' }, { a: { $substr: [1,1] } }).should.eql({ a: 'o' });
+          _.extend({ a: 'foo' }, { a: { $toUpperCase: undefined } }).should.eql({ a: 'FOO' });
+          _.extend({ a: '  foo  ' }, { a: { $trim: null } }).should.eql({ a: 'foo' });
+        });
+
+        it('Number', function() {
+          _.extend({ a: 1 }, { a: { $toString: undefined } }).should.eql({ a: '1' });
+          _.extend({ a: 1 }, { a: { $toFixed: null } }).should.eql({ a: '1' });
+        });
+
+        it('Array', function() {
+          _.extend({ a: [1] }, { a: { $concat: [2] } }).should.eql({ a: [1,2] });
+          _.extend({ a: [1,2] }, { a: { $reverse: null } }).should.eql({ a: [2,1] });
+        });
       });
     });
   });
