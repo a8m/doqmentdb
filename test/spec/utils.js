@@ -156,5 +156,15 @@ describe('utils', function() {
       _.forEach(_agileWrapper, function() {});
       _agileWrapper.forEach.called.should.eql(true);
     });
+
+    describe('.extends()', function() {
+      describe('extending objects', function() {
+        // ...
+      });
+
+      describe('using operations', function() {
+        // ...
+      });
+    });
   });
 });
