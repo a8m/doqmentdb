@@ -187,6 +187,23 @@ describe('utils', function() {
         it('Array', function() {
           _.extend({ a: [1] }, { a: { $concat: [2] } }).should.eql({ a: [1,2] });
           _.extend({ a: [1,2] }, { a: { $reverse: null } }).should.eql({ a: [2,1] });
+          _.extend({ a: [3,1,4] }, { a: { $sort: undefined } }).should.eql({ a: [1,3,4] });
+          _.extend({ a: [1,2] }, { a: { $push: 3 } }).should.eql({ a: [1,2,3] });
+          _.extend({ a: [1,2] }, { a: { $shift: undefined } }).should.eql({ a: [2] });
+          _.extend({ a: [1,2] }, { a: { $pop: undefined } }).should.eql({ a: [1] });
+
+          function addOne(e) { return e + 1; }
+          _.extend({ a: [1,2,3] }, { a: { $map: addOne } }).should.eql({ a: [2,3,4] });
+          function isEven(e) { return !(e%2); }
+          _.extend({ a: [1,2,3] }, { a: { $filter: isEven } }).should.eql({ a: [2] });
+          // not change the type of array
+          _.extend({ a: ['a', 'b'] }, { a: { $join: '/' } }).should.eql({ a: ['a', 'b'] });
+        });
+
+        it('Putting things together', function() {
+          _.extend({ arr: [1,2], str: 'foo' },
+            { str: { $concat: 'bar' } }, { arr: { $push: 3 }, done: true })
+            .should.eql({ arr: [1,2,3], str: 'foobar', done: true });
         });
       });
     });
