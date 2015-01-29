@@ -32,6 +32,7 @@
   - [findOrCreate](#findorcreate-1)
   - [update](#findandmodify)
 - [Queries](#queries)
+- [Operations](#operations)
 - [Schema](#schema)
 - [Middleware](#middleware)
   - [pre](#pre)
@@ -294,6 +295,21 @@ users.find({ coins: { $in: 2 } })
 
 users.find({ $not: { age: { $type: 'number' } } })
 // ... r WHERE NOT(typeUDF(r.age, "number"))
+```
+
+#Operations
+When using one of the update operations(**e.g:** `.update()`, `.findAndModify()`, etc...), you could use the build-in `prototype` functions(based on the type) prefixing with `$` sign.  
+**Usage:** `users.update({ ... }, { keyName: { $method: value } })`  
+**Note:** value could be single or array of arguments.
+```js
+// Find all, and push 2 to `arr` field
+users.update({}, { arr: { $push: 2 } });
+
+// Suffix all users `name` with #
+users.update({}, { name: { $concat: '#' } });
+
+// Trim the name from `foo` to `o`
+users.update({  name: 'foo' }, { name: { $substr: [1,1] } });
 ```
 
 #Schema
