@@ -1,7 +1,7 @@
 {
   "name": "doqmentdb",
   "description": "A Promise-Based DocumentDB ODM Client for NodeJS",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "filename": "index.js",
   "main": "index.js",
   "homepage": "https://github.com/a8m/doqmentdb",
@@ -16,7 +16,9 @@
   "keywords": [
     "documentDB",
     "doqmentDB",
-    "odm"
+    "odm",
+    "atomic transaction",
+    "schema"
   ],
   "dependencies": {
     "bluebird": "^2.3.11",
