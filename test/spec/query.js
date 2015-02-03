@@ -7,6 +7,10 @@ var should = require('should')
 describe('QueryBuilder', function() {
   var BQ = 'SELECT * FROM root r WHERE ';
   describe('test .query() behavior', function() {
+    it('should work with empry', function() {
+      query({}).should.eql('SELECT * FROM root r');
+    });
+
     it('simple equal', function() {
       query({ a: 1, b: 2, c: 3 }).should.eql(BQ + 'r.a=1 AND r.b=2 AND r.c=3');
       query({ a: "1", b: "2", c: "3" }).should.eql(BQ + 'r.a="1" AND r.b="2" AND r.c="3"');

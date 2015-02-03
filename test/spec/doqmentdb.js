@@ -538,6 +538,82 @@ describe('DoqmentDB', function() {
           });
         });
 
+        describe('Sporcs', function() {
+          var createSporc, deleteSporc, executeSporc;
+          before(function() {
+            createSporc = stub(DocumentDB.prototype, 'createStoredProcedure');
+            deleteSporc = stub(DocumentDB.prototype, 'deleteStoredProcedure');
+            executeSporc = stub(DocumentDB.prototype, 'executeStoredProcedure', applyCallback);
+          });
+          describe('.$findAndModify()', function() {
+            beforeEach(function() {
+              var stub1 = stub(DocumentDB.prototype, 'queryStoredProcedures');
+              stub1.onCall(0).returns(toArray([null, [{id: '..', _self: '..'}]]));
+            });
+
+            it('should create sporcs if not exist', function(done) {
+              assertCalled(users.$findAndModify({name: 'foo'}, {name: 'bar'})
+                , done, executeSporc);
+            });
+            afterEach(function() {
+              DocumentDB.prototype.queryStoredProcedures.restore();
+            });
+          });
+
+          describe('.$findOneAndModify()', function() {
+            beforeEach(function() {
+              var stub1 = stub(DocumentDB.prototype, 'queryStoredProcedures');
+              stub1.onCall(0).returns(toArray([null, [{id: '..', _self: '..'}]]));
+            });
+
+            it('should create sporcs if not exist', function(done) {
+              assertCalled(users.$findOneAndModify({name: 'foo'}, {name: 'bar'})
+                , done, executeSporc);
+            });
+
+            afterEach(function() {
+              DocumentDB.prototype.queryStoredProcedures.restore();
+            });
+          });
+
+          describe('.$finAndRemove()', function() {
+            beforeEach(function() {
+              var stub1 = stub(DocumentDB.prototype, 'queryStoredProcedures');
+              stub1.onCall(0).returns(toArray([null, [{id: '..', _self: '..'}]]));
+            });
+
+            it('should create sporcs if not exist', function(done) {
+              assertCalled(users.$findAndRemove({name: 'foo'})
+                , done, executeSporc);
+            });
+
+            it('should create sporcs if not exist', function(done) {
+              assertCalled(users.$findOneAndRemove({name: 'foo'})
+                , done, executeSporc);
+            });
+
+            afterEach(function() {
+              DocumentDB.prototype.queryStoredProcedures.restore();
+            });
+          });
+
+          describe('.$finOrCreate()', function() {
+            beforeEach(function() {
+              var stub1 = stub(DocumentDB.prototype, 'queryStoredProcedures');
+              stub1.onCall(0).returns(toArray([null, [{id: '..', _self: '..'}]]));
+            });
+
+            it('should create sporcs if not exist', function(done) {
+              assertCalled(users.$findOrCreate({name: 'foo'})
+                , done, executeSporc);
+            });
+
+            afterEach(function() {
+              DocumentDB.prototype.queryStoredProcedures.restore();
+            });
+          });
+        });
+
         describe('Schema', function() {
           var users = dbManager.use('users');
           users.schema({
