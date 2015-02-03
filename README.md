@@ -5,10 +5,11 @@
 [![Dependency Status][david-image]][david-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
-> DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users(with schema, hooks/middleware).
+> DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users(support schema, hooks/middleware, atomic-transactions, udf and more).
 
 ##Table of contents:
 - [Get Started](#get-started)
+- [Changelog](#changelog)
 - [Database](#database)
   - [create](#create)
   - [insert](#create)
@@ -194,9 +195,15 @@ users.findById('53...3')
 ##findAndRemove
 get object properties to search, find the equivalents and remove them.  
 **Usage:** `users.findAndRemove(object)`  
-**Returns:** `Array`
+**Returns:** `Array`  
+**Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system), 
+you need use this method prefix with `$` sign.
 ```js
 users.findAndRemove({ name: 'Ariel' })
+  .then(console.log);
+
+// Using stored procedure
+users.$findAndRemove({ name: 'Ariel' })
   .then(console.log);
 
 // Remove all users
@@ -206,34 +213,59 @@ users.findAndRemove({})
 ##findOneAndRemove
 get object properties, and remove the first matching result.  
 **Usage:** `users.findOneAndRemove(object)`  
-**Returns:** `undefined` or `Boolean`
+**Returns:** `undefined` or `Boolean`  
+**Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system), 
+you need use this method prefix with `$` sign.
 ```js
 users.findOneAndRemove({ name: 'Ariel', admin: true })
+  .then(console.log);
+  
+// Using stored procedure
+users.$findOneAndRemove({ name: 'Ariel', admin: true })
   .then(console.log);
 ```
 ##findAndModify
 get object properties to search, find the equivalents and modify them(`extend` operation).  
 **Usage:** `users.findAndModify(object, extend)`  
 **Aliases:** `update`  
-**Returns:** `Array`
+**Returns:** `Array`  
+**Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system), 
+you need use this method prefix with `$` sign.
 ```js
 users.update({ name: 'Ariel', admin: true }, { admin: false })
   .then(console.log);
+  
+// Push 'a' and 'b' to `list` field(do it concurrently)
+['a', 'b'].forEach(function(ch) {
+  users.$update({}, { list: { $push: ch } });
+});
 ```
 ##findOneAndModify
 get object properties and modify(`extend` operation) the first matching.  
 **Usage:** `users.findOneAndModify(object, extend)`  
-**Returns:** `Object`
+**Returns:** `Object`  
+**Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system), 
+you need use this method prefix with `$` sign.
 ```js
 users.findOneAndModify({ admin: false }, { admin: true })
+  .then(console.log);
+
+// Using stored procedure
+users.$findOneAndModify({ admin: false }, { admin: true })
   .then(console.log);
 ```
 ##findOrCreate
 get object properties, search for document, if it not exist create one.  
 **Usage:** `users.findOrCreate(object)`    
-**Returns:** `Object`
+**Returns:** `Object`  
+**Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system), 
+you need use this method prefix with `$` sign.
 ```js
 users.findOrCreate({ admin: false, name: 'Ariel' })
+  .then(console.log);
+
+// Using stored procedure
+users.$findOrCreate({ admin: false, name: 'Ariel' })
   .then(console.log);
 ```
 
@@ -469,6 +501,24 @@ users.pre('save', function(next) {
 ```js
 users.post('save', function(doc) {
   logger(new Date(), doc, 'saved!')
+});
+```
+
+#Changelog
+##0.2.5
+Since **0.2.5** DoQmentDB support atomic transactions using stored procedures.  
+Methods that support:
+ * `update`/`findAndModify`
+ * `findOneAndModify`
+ * `findOrCreate`
+ * `findAndRemove`
+ * `findOneAndRemove`
+
+If you want to use one of this methods, you should use them prefix with `$` sign.
+```js
+// Push 'a' and 'b' to `list` field(do it concurrently)
+['a', 'b'].forEach(function(ch) {
+  users.$update({}, { list: { $push: ch } });
 });
 ```
 
