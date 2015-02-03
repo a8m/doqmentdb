@@ -48,10 +48,10 @@ describe('Stored procedures', function() {
     describe('onSuccess', function() {
       beforeEach(function() {
         stub(collectionManager, 'queryDocuments',
-          _.applyCallbackWith(null, [{ name: 'foo', arr: [], _self: '..' }]));
+          _.applyCallbackWith(null, [{ obj: {a: {}}, name: 'foo', arr: [], _self: '..' }]));
       });
       it('should call queryDocuments with the given query', function() {
-        func('SELECT * FROM root r', { arr: { $push: 1 } });
+        func('SELECT * FROM root r', { arr: { $push: 1 }, obj: {a: {b:2}} });
         collectionManager.queryDocuments.called.should.eql(true);
       });
 

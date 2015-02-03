@@ -171,6 +171,10 @@ describe('utils', function() {
       });
 
       describe('using operations', function() {
+        it('Nested Objects', function() {
+          _.extend({a:{ b:1, c: 2 }}, { a: { b: 2 } }).should.eql({a:{ b:2, c: 2 }});
+          _.extend({a:{ b:1, c: 2 }}, { a: [1,2] }).should.eql({a:[1,2]});
+        });
         it('String', function() {
           _.extend({ a: 'foo' }, { a: { $concat: 'bar' } }).should.eql({ a: 'foobar' });
           _.extend({ a: 'foo' }, { a: { $substr: 1 } }).should.eql({ a: 'oo' });
