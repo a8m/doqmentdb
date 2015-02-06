@@ -75,7 +75,7 @@ describe('DoqmentDB', function() {
     describe('Public API', function() {
       var connection = new DocumentDB('host', { masterKey: 'key' });
       var dbManager  = new DoQmentDB(connection, '');
-      var queryStub, readStub;
+      var queryStub;
 
       beforeEach(function() {
         // _getDatabase
@@ -83,9 +83,7 @@ describe('DoqmentDB', function() {
           .returns(toArray([null, DB_MOCK]));
         // (query|read)Collections
         queryStub = stub(DocumentDB.prototype, 'queryCollections');
-        readStub = stub(DocumentDB.prototype,  'readCollections');
         queryStub.returns(toArray([null, [COLL_MOCK]]));
-        readStub.returns(toArray([null, [1, 2]]));
       });
 
       describe('.getDatabase()', function() {
@@ -106,12 +104,13 @@ describe('DoqmentDB', function() {
 
         //TODO: calledWith assertion
 
-        it('should get an empty object and call `readCollections`', function(done) {
-          assertCalled(dbManager.find({}), done, readStub);
+        it('should get an empty object and call `queryCollections` with' +
+          '`SELECT * FROM root r` query', function(done) {
+          assertCalled(dbManager.find({}), done, queryStub);
         });
 
-        it('should get an `undefined` params and call `readCollections`', function(done) {
-          assertCalled(dbManager.find(undefined), done, readStub);
+        it('should get an `undefined` params and call `queryCollections`', function(done) {
+          assertCalled(dbManager.find(undefined), done, queryStub);
         });
       });
 
@@ -182,13 +181,11 @@ describe('DoqmentDB', function() {
 
       describe('CollectionManager', function() {
         var users = dbManager.use('users');
-        var readStub, queryStub;
+        var queryStub;
 
         beforeEach(function() {
-          readStub = stub(DocumentDB.prototype, 'readDocuments');
           queryStub = stub(DocumentDB.prototype, 'queryDocuments');
           queryStub.returns(toArray([null, [DOC_MOCK]]));
-          readStub.returns(toArray([null, [1, 2]]));
           spy(users, 'emit');
         });
 
@@ -204,12 +201,12 @@ describe('DoqmentDB', function() {
         });
 
         describe('.find()', function() {
-          it('should get empty object and call `readDocuments`', function(done) {
-            assertCalled(users.find({}), done, readStub);
+          it('should get empty object and call `queryDocuments`', function(done) {
+            assertCalled(users.find({}), done, queryStub);
           });
 
-          it('should get undefined param and call `readDocuments`', function(done) {
-            assertCalled(users.find(undefined), done, readStub);
+          it('should get undefined param and call `queryDocuments`', function(done) {
+            assertCalled(users.find(undefined), done, queryStub);
           });
 
           it('should get object params and call `queryDocuments`', function(done) {
@@ -417,7 +414,7 @@ describe('DoqmentDB', function() {
         describe('Groups', function() {
           var results = [{_self: 1}, {_self: 2}, {_self: 3}, {_self: 4}];
           beforeEach(function() {
-            readStub.returns(toArray([null, results]));
+            queryStub.returns(toArray([null, results]));
           });
 
           // #1
@@ -625,7 +622,6 @@ describe('DoqmentDB', function() {
         });
 
         afterEach(function() {
-          readStub.restore();
           queryStub.restore();
           users.emit.restore();
         });
@@ -633,7 +629,6 @@ describe('DoqmentDB', function() {
 
       afterEach(function() {
         queryStub.restore();
-        readStub.restore();
         DocumentDB.prototype.queryDatabases.restore();
       });
     });
