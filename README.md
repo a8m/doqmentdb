@@ -1,4 +1,6 @@
 ##DoQmentDB - A Promise-Based DocumentDB Client 
+
+[![Join the chat at https://gitter.im/a8m/doqmentdb](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/a8m/doqmentdb?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
