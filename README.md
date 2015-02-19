@@ -1,6 +1,4 @@
 ##DoQmentDB - A Promise-Based DocumentDB Client 
-
-[![Join the chat at https://gitter.im/a8m/doqmentdb](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/a8m/doqmentdb?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
@@ -10,6 +8,7 @@
 > DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users(support schema, hooks/middleware, atomic-transactions, udf and more).
 
 ##Table of contents:
+- [![Gitter][gitter-image]][gitter-url]
 - [Get Started](#get-started)
 - [Changelog](#changelog)
 - [Database](#database)
@@ -536,3 +535,5 @@ If you want to use one of this methods, you should use them prefix with `$` sign
 [license-url]: LICENSE
 [downloads-image]: http://img.shields.io/npm/dm/doqmentdb.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/doqmentdb
+[gitter-image]: https://badges.gitter.im/Join%20Chat.svg
+[gitter-url]: https://gitter.im/a8m/doqmentdb?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
