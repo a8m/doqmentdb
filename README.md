@@ -507,7 +507,7 @@ users.post('save', function(doc) {
 
 #Changelog
 ##0.2.6
-Since **0.2.6** DoQmentDB support atomic transactions using stored procedures.  
+Since **0.2.6** DoQmentDB support atomic transactions using `DocumentDB stored procedures`.  
 Methods that support:
  * `update`/`findAndModify`
  * `findOneAndModify`
