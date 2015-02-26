@@ -511,6 +511,7 @@ users.post('save', function(doc) {
 ##0.2.8
 * Add aliases: `updateOne` and `$updateOne`(the conccurent one)
 * refactor the built-in stored procedure(`findAndModify`)
+
 ##0.2.6
 Since **0.2.6** DoQmentDB support atomic transactions using `DocumentDB stored procedures`.  
 Methods that support:
