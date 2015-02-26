@@ -33,6 +33,7 @@
   - [findOneAndModify](#findoneandmodify)
   - [findOrCreate](#findorcreate-1)
   - [update](#findandmodify)
+  - [updateOne](#findoneandmodify)
 - [Queries](#queries)
 - [Operations](#operations)
 - [Schema](#schema)
@@ -244,6 +245,7 @@ users.update({ name: 'Ariel', admin: true }, { admin: false })
 ##findOneAndModify
 get object properties and modify(`extend` operation) the first matching.  
 **Usage:** `users.findOneAndModify(object, extend)`  
+**Aliases:** `updateOne`  
 **Returns:** `Object`  
 **Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system), 
 you need use this method prefix with `$` sign.
