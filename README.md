@@ -531,12 +531,6 @@ sbs.receiveQueueMessage('users', function(msg) {
 });
 ```
 
-Since **v0.2.6** DoQmentDB supports atomic-transactions for `create`, `update` and `remove` operations that happen concurrently.  
-This functionality guarantees that database operations performed in a single stored procedure
-'sporcs'(i.e:stored procedures)
-
-(**i.e:** do things concurrently, **e.g:** distributed system)
-
 #Changelog
 ##0.2.8
 * Add aliases: `updateOne` and `$updateOne`(the conccurent one)
