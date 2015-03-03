@@ -512,17 +512,17 @@ Since **v0.2.6** DoQmentDB supports atomic-transactions using a built-in sporcs(
 **Note:** To perform some operation this way, you should prefix it with `$`.  
 **Read More:** [DocumentDB - Atomic Transactions](https://github.com/Azure/azure-content/blob/master/articles/documentdb-programming.md#introduction)
 ```js
-// Lets take some example of `cosuming` from two differents 
+// Lets take some example of `consuming` from two differents 
 // Service-Bus queues and update the same `model`/`document`
 //
 // Note: This also could happen in a distributed system, when two operations happens in parallel
 
 // We have a `stores` collection that holds the `sales` and the `users`
-// per `store`(a Document)
-// We are using the `atomic` version, because we don't want to lose data
+// fields per `store`(a Document)
+// We are using the `atomic` version of `update`, because we don't want to lose data
 sbs.receiveQueueMessage('sales', function(msg) {
   stores.$update({ id: msg.id }, { sales: { $push: msg.sale } });
-  // ...
+  // Polling again...
 });
 
 sbs.receiveQueueMessage('users', function(msg) {
