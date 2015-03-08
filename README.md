@@ -10,7 +10,7 @@
 ##Table of contents:
 - [![Gitter][gitter-image]][gitter-url]
 - [Get Started](#get-started)
-- [Examples](#examples)
+- [Examples](#examples-1)
 - [Changelog](#changelog)
 - [Database](#database)
   - [create](#create)
