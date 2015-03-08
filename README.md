@@ -10,6 +10,7 @@
 ##Table of contents:
 - [![Gitter][gitter-image]][gitter-url]
 - [Get Started](#get-started)
+- [Examples](#examples)
 - [Changelog](#changelog)
 - [Database](#database)
   - [create](#create)
@@ -530,6 +531,10 @@ sbs.receiveQueueMessage('users', function(msg) {
   // ...
 });
 ```
+
+#Examples
+* [Koa DocumentDB Example](https://github.com/a8m/koa-documentdb-example) - A users CRUD application using Koa and DocumentDB.
+* [Express DocumentDB Example](https://github.com/a8m/doqmentdb/tree/master/example/users) - Express application using DocumentDB.
 
 #Changelog
 ##0.2.8
