@@ -84,6 +84,15 @@ describe('SchemaService', function() {
             });
         });
 
+        it('should ignore model fields that isn\'t existing in the schema', function(done) {
+          var o1 = { createdAt: 'foo-bar',name:'Ariel' };
+          schema.test.update(o1)
+            .then(function(o2) {
+              o2.should.eql(o1);
+              done();
+            });
+        });
+
         it('should catch and return the errs', function(done) {
           var o1 = { name: 'o1', phone: undefined };
           schema.test.update(o1)
