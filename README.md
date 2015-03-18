@@ -537,6 +537,9 @@ sbs.receiveQueueMessage('users', function(msg) {
 * [Express DocumentDB Example](https://github.com/a8m/doqmentdb/tree/master/example/users) - Express application using DocumentDB.
 
 #Changelog
+##0.2.9
+* Schema Fix- issue #26
+
 ##0.2.8
 * Add aliases: `updateOne` and `$updateOne`(the conccurent one)
 * refactor the built-in stored procedure(`findAndModify`)
