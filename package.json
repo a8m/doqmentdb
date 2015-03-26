@@ -21,7 +21,7 @@
     "schema"
   ],
   "dependencies": {
-    "bluebird": "^2.3.11",
+    "bluebird": "^2.9.15",
     "documentdb": "^0.9.3"
   },
   "devDependencies": {
