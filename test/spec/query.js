@@ -85,25 +85,25 @@ describe('QueryBuilder', function() {
 
     it('should work with functions', function() {
       query({ coins: { $in: 2 } }).should.eql({
-        query: BQ + 'inUDF(r.coins, 2)',
+        query: BQ + 'udf.inUDF(r.coins, 2)',
         udf: [ { id: constant.$in.name, body: constant.$in.func } ]
       });
       // that's how you should do the `{ coins: { $nin: 2 } }`
       query({ $not: { coins: { $in: 2 } } }).should.eql({
-        query: BQ + 'NOT(inUDF(r.coins, 2))',
+        query: BQ + 'NOT(udf.inUDF(r.coins, 2))',
         udf: [ { id: constant.$in.name, body: constant.$in.func } ]
       });
       query({ name: { $type: 'string' } }).should.eql({
-        query: BQ + 'typeUDF(r.name, "string")',
+        query: BQ + 'udf.typeUDF(r.name, "string")',
         udf: [{ id: constant.$type.name, body: constant.$type.func } ]
       });
 
       query({ $not: { name: { $regex: /d+/g } } }).should.eql({
-        query: BQ + 'NOT(regexUDF(r.name, /d+/g))',
+        query: BQ + 'NOT(udf.regexUDF(r.name, /d+/g))',
         udf: [ { id: constant.$regex.name, body: constant.$regex.func } ]
       });
       query({ $not: { age: { $type: 'number' } } }).should.eql({
-        query: BQ + 'NOT(typeUDF(r.age, "number"))',
+        query: BQ + 'NOT(udf.typeUDF(r.age, "number"))',
         udf: [{ id: constant.$type.name, body: constant.$type.func }]
       });
     });
