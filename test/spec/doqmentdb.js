@@ -417,12 +417,9 @@ describe('DoqmentDB', function() {
             upsertStub = stub(DocumentDB.prototype, 'upsertDocument', applyCallback);
           });
 
-          it('should call `upsertDocument` with each result', function(done) {
-            users.upsert({})
-              .then(function() {
-                upsertStub.callCount.should.eql(results.length);
-                done();
-              });
+          it('should call `upsertDocument`', function(done) {
+            var upsert = users.upsert(DOC_MOCK._self);
+            assertCalled(upsert, done, upsertStub, [COLL_MOCK._self, DOC_MOCK._self]);
           });
 
           it('should have an alias `upsert`', function() {
