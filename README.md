@@ -167,7 +167,7 @@ users.create({ name: 'Ariel', admin: true })
   .then(console.log); // { name: 'Ariel', admin: true, id: '8...31', _self: ... }
 ```
 ##createOrUpdate
-create a new document under the current collection, or update an existing document with the same id.
+create a new document under the current collection, or update an existing document with the same id.  
 **Usage:** `users.upsert(object)`  
 **Aliases:** `upsert`  
 **Returns:** `Object`
