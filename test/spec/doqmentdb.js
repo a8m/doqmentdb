@@ -411,6 +411,52 @@ describe('DoqmentDB', function() {
           });
         });
 
+        describe('.createOrUpdate() | .upsert()', function() {
+          var upsertStub;
+          beforeEach(function() {
+            upsertStub = stub(DocumentDB.prototype, 'upsertDocument', applyCallback);
+          });
+
+          it('should call `upsertDocument` with each result', function(done) {
+            users.upsert({})
+              .then(function() {
+                upsertStub.callCount.should.eql(results.length);
+                done();
+              });
+          });
+
+          it('should have an alias `upsert`', function() {
+            users.upsert.should.eql(users.createOrUpdate);
+          });
+
+          describe('#hooks', function() {
+            it('should call the `pre` hook before upserting', function(done) {
+              var t = {fn:function(nxt){nxt();}};
+              var spyFn = spy(t, 'fn');
+              users.pre('upsert', t.fn);
+              users.upsert({}).then(function() {
+                spyFn.called.should.eql(true);
+                done();
+              });
+            });
+
+            it('should call `emit` after upserting', function(done) {
+              var t = {fn:function(nxt){}};
+              var spyFn = spy(t, 'fn');
+              users.post('upsert', t.fn);
+              users.upsert({}).then(function(data) {
+                spyFn.calledWith(data).should.eql(true);
+                users.emit.called.should.eql(true);
+                done();
+              });
+            });
+          });
+
+          afterEach(function() {
+            upsertStub.restore();
+          });
+        });
+
         describe('Groups', function() {
           var results = [{_self: 1}, {_self: 2}, {_self: 3}, {_self: 4}];
           beforeEach(function() {

@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "bluebird": "^2.9.15",
-    "documentdb": "^1.0.0"
+    "documentdb": "^1.4.0"
   },
   "devDependencies": {
     "agile": "0.0.2",
