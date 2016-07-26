@@ -59,9 +59,9 @@ var DoqmentDB = require('doqmentdb');
 var DoQmentDB  = require('doqmentdb');
 // Create DocumentDB connection
 var connection = new (require('documentdb').DocumentClient)(HOST, OPTIONS);
-// Pass connection and database-name, if `test` is not exist it will create one.
+// Pass connection and database-name, if `test` does not exist it will create one.
 var db = new DoQmentDB(connection, 'test');
-// Create a CollectionManager instance, if `users` is not exist it will create one.
+// Create a CollectionManager instance, if `users` does not exist it will create one.
 var users = db.use('users');
 // Using schema
 users.schema(model);
@@ -88,7 +88,7 @@ Create a DatabaseManager by passing `connection` and `databaseName`.
 var DoQmentDB  = require('doqmentdb');
 // Create DocumentDB connection
 var connection = new (require('documentdb').DocumentClient)(HOST, OPTIONS);
-// if `test` is not exist it will create one
+// if `test` does not exist it will create one
 var db = new DoQmentDB(connection, 'test');
 ```
 ##create
@@ -128,7 +128,7 @@ db.findById('users')
   .then(console.log);
 ```
 ##findOrCreate
-get object properties, search for collection, if it not exist create one.  
+get object properties, search for collection, if it does not exist create one.  
 **Usage:** `db.findOrCreate(object)`  
 **Returns:** `Object`
 ```js
@@ -136,7 +136,7 @@ db.findOrCreate({ name: 'users', id: '#1' })
   .then(console.log);
 ```
 ##remove
-get collection id as a `String`, if it exist - remove it and return `undefined`, else return `false`.  
+get collection id as a `String`, if it exists - remove it and return `undefined`, else return `false`.  
 **Usage:** `db.remove(string)`  
 **Returns:** `undefined` or `Boolean`
 ```js
@@ -145,7 +145,7 @@ db.remove('test')
 ```
 ##use
 get collection name and return `CollectionManager` instance.  
-**Note:** if the given `collection` is not exist it will create one.  
+**Note:** if the given `collection` does not exist it will create one.  
 **Usage:** `var coll = db.use(string);`  
 **Returns:** `object` instanceof `CollectionManager`
 ```js
@@ -183,7 +183,7 @@ users.getCollection()
   .then(console.log);
 ```
 ##find
-get object properties and return array of results.  
+get object properties and return an array of results.  
 **Usage:** `users.find(object)`  
 **Note:** to return all collections, omit params argument or pass an empty object({}).  
 **Returns:** `Array`
@@ -211,7 +211,7 @@ users.findById('53...3')
 get object properties to search, find the equivalents and remove them.  
 **Usage:** `users.findAndRemove(object)`  
 **Returns:** `Array`  
-**Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system),
+**Note:** if you want atomic-transactions support(**i.e:** do things concurrently, **e.g:** distributed system),
 you need use this method prefix with `$` sign.
 ```js
 users.findAndRemove({ name: 'Ariel' })
@@ -229,7 +229,7 @@ users.findAndRemove({})
 get object properties, and remove the first matching result.  
 **Usage:** `users.findOneAndRemove(object)`  
 **Returns:** `undefined` or `Boolean`  
-**Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system),
+**Note:** if you want atomic-transactions support(**i.e:** do things concurrently, **e.g:** distributed system),
 you need use this method prefix with `$` sign.
 ```js
 users.findOneAndRemove({ name: 'Ariel', admin: true })
@@ -244,7 +244,7 @@ get object properties to search, find the equivalents and modify them(`extend` o
 **Usage:** `users.findAndModify(object, extend)`  
 **Aliases:** `update`  
 **Returns:** `Array`  
-**Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system),
+**Note:** if you want atomic-transactions support(**i.e:** do things concurrently, **e.g:** distributed system),
 you need use this method prefix with `$` sign.
 ```js
 users.update({ name: 'Ariel', admin: true }, { admin: false })
@@ -260,7 +260,7 @@ get object properties and modify(`extend` operation) the first matching.
 **Usage:** `users.findOneAndModify(object, extend)`  
 **Aliases:** `updateOne`  
 **Returns:** `Object`  
-**Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system),
+**Note:** if you want atomic-transactions support(**i.e:** do things concurrently, **e.g:** distributed system),
 you need use this method prefix with `$` sign.
 ```js
 users.findOneAndModify({ admin: false }, { admin: true })
@@ -274,7 +274,7 @@ users.$findOneAndModify({ admin: false }, { admin: true })
 get object properties, search for document, if it not exist create one.  
 **Usage:** `users.findOrCreate(object)`    
 **Returns:** `Object`  
-**Note:** if you want support atomic-transactions(**i.e:** do things concurrently, **e.g:** distributed system),
+**Note:** if you want atomic-transactions support(**i.e:** do things concurrently, **e.g:** distributed system),
 you need use this method prefix with `$` sign.
 ```js
 users.findOrCreate({ admin: false, name: 'Ariel' })
@@ -346,7 +346,7 @@ users.find({ $not: { age: { $type: 'number' } } })
 ```
 
 #Operations
-When using one of the update operations(**e.g:** `.update()`, `.findAndModify()`, etc...), you could use the build-in `prototype` functions(based on the type) prefixing with `$` sign.  
+When using one of the update operations(**e.g:** `.update()`, `.findAndModify()`, etc...), you could use the built-in `prototype` functions(based on the type) prefixed with the `$` sign.  
 **Usage:** `users.update({ ... }, { keyName: { $method: value } })`  
 **Note:** value could be single or array of arguments.
 ```js
@@ -507,7 +507,7 @@ users.pre('save', function(next) {
     });
   });
 });
-// ##Note: the order is importatnt, this example order:
+// ##Note: the order is important, this example order:
 // `createdAt()`, `updatedAT()`, `hash/bcrypt()`, and then the `.create` operation will called
 ```
 ##post
@@ -586,3 +586,4 @@ If you want to use one of this methods, you should use them prefix with `$` sign
 [downloads-url]: https://npmjs.org/package/doqmentdb
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]: https://gitter.im/a8m/doqmentdb?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
