@@ -1,4 +1,4 @@
-##DoQmentDB - A Promise-Based DocumentDB Client
+## DoQmentDB - A Promise-Based DocumentDB Client
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
@@ -7,7 +7,7 @@
 [![Downloads][downloads-image]][downloads-url]
 > DoQmentDB is a tiny layer that provides the simplicity of MongoDB for DocumentDB users(support schema, hooks/middleware, atomic-transactions, udf and more).
 
-##Table of contents:
+## Table of contents:
 - [![Gitter][gitter-image]][gitter-url]
 - [Get Started](#get-started)
 - [Examples](#examples-1)
@@ -45,7 +45,7 @@
   - [pre](#pre)
   - [post](#post)
 
-#Get Started
+# Get Started
 **(1)** You can install **DoQmentDB** using 2 different methods:  
 - clone & [build](#developing) this repository
 - via **[npm](https://www.npmjs.org/)**: by running `$ npm install doqmentdb` from your terminal
@@ -82,7 +82,7 @@ users.findById(1)
 users.findAndRemove({ isAdmin: false })
   .then(console.log);
 ```
-#Database
+# Database
 Create a DatabaseManager by passing `connection` and `databaseName`.
 ```js
 var DoQmentDB  = require('doqmentdb');
@@ -91,7 +91,7 @@ var connection = new (require('documentdb').DocumentClient)(HOST, OPTIONS);
 // if `test` does not exist it will create one
 var db = new DoQmentDB(connection, 'test');
 ```
-##create
+## create
 Get name and crete new collection in the used db.  
 **Usage:** `db.create(string)`  
 **Aliases:** `insert`  
@@ -100,14 +100,14 @@ Get name and crete new collection in the used db.
 db.create('users')
   .then(console.log);
 ```
-##getDatabase
+## getDatabase
 Return the used database.  
 **Usage:** `db.getDatabase()`
 ```js
 db.getDatabase()
   .then(console.log);
 ```
-##find
+## find
 find collection by given object params.  
 **Note:** to return all documents, omit params argument or pass an empty object({}).  
 **Usage:** `db.find(object[optional])`  
@@ -119,7 +119,7 @@ db.find()
 db.find({ id: 'users' })
   .then(console.log); // Return collections where id equal to `users`
 ```
-##findById
+## findById
 find collection by given `string` id.  
 **Usage:** `db.findById(string)`  
 **Returns:** `Object`
@@ -127,7 +127,7 @@ find collection by given `string` id.
 db.findById('users')
   .then(console.log);
 ```
-##findOrCreate
+## findOrCreate
 get object properties, search for collection, if it does not exist create one.  
 **Usage:** `db.findOrCreate(object)`  
 **Returns:** `Object`
@@ -135,7 +135,7 @@ get object properties, search for collection, if it does not exist create one.
 db.findOrCreate({ name: 'users', id: '#1' })
   .then(console.log);
 ```
-##remove
+## remove
 get collection id as a `String`, if it exists - remove it and return `undefined`, else return `false`.  
 **Usage:** `db.remove(string)`  
 **Returns:** `undefined` or `Boolean`
@@ -143,7 +143,7 @@ get collection id as a `String`, if it exists - remove it and return `undefined`
 db.remove('test')
   .then(console.log);
 ```
-##use
+## use
 get collection name and return `CollectionManager` instance.  
 **Note:** if the given `collection` does not exist it will create one.  
 **Usage:** `var coll = db.use(string);`  
@@ -151,13 +151,13 @@ get collection name and return `CollectionManager` instance.
 ```js
 var users = db.use('users'); // This operation is not async
 ```
-#Collection
+# Collection
 Create a CollectionManager by passing to `.use` function a collection name.
 ```js
 var users = db.use('users');
 console.log(users.constructor.name); // Collection
 ```
-##create
+## create
 get object properties, and create new document under the used collection.  
 **Usage:** `users.create(object)`  
 **Aliases:** `insert`  
@@ -166,7 +166,7 @@ get object properties, and create new document under the used collection.
 users.create({ name: 'Ariel', admin: true })
   .then(console.log); // { name: 'Ariel', admin: true, id: '8...31', _self: ... }
 ```
-##createOrUpdate
+## createOrUpdate
 create a new document under the current collection, or update an existing document with the same id.  
 **Usage:** `users.createOrUpdate(object)`  
 **Aliases:** `upsert`  
@@ -175,14 +175,14 @@ create a new document under the current collection, or update an existing docume
 users.upsert({ id: 'my_user_id', admin: true })
   .then(console.log); // { id: 'my_user_id', admin: true, _self: ... }
 ```
-##getCollection
+## getCollection
 return the used collection.  
 **Usage:** `users.getCollection()`
 ```js
 users.getCollection()
   .then(console.log);
 ```
-##find
+## find
 get object properties and return an array of results.  
 **Usage:** `users.find(object)`  
 **Note:** to return all collections, omit params argument or pass an empty object({}).  
@@ -191,7 +191,7 @@ get object properties and return an array of results.
 users.find({ active: true })
   .then(console.log);
 ```
-##findOne
+## findOne
 get object properties and return the first matching result.  
 **Usage:** `users.findOne(object)`  
 **Returns:** `Object`
@@ -199,7 +199,7 @@ get object properties and return the first matching result.
 users.findOne({ active: true, name: 'Bar' })
   .then(console.log);
 ```
-##findById
+## findById
 find document by giving a `string` id.  
 **Usage:** `users.findById(string)`  
 **Returns:** `Object`
@@ -207,7 +207,7 @@ find document by giving a `string` id.
 users.findById('53...3')
   .then(console.log);
 ```
-##findAndRemove
+## findAndRemove
 get object properties to search, find the equivalents and remove them.  
 **Usage:** `users.findAndRemove(object)`  
 **Returns:** `Array`  
@@ -225,7 +225,7 @@ users.$findAndRemove({ name: 'Ariel' })
 users.findAndRemove({})
   .then(console.log);
 ```
-##findOneAndRemove
+## findOneAndRemove
 get object properties, and remove the first matching result.  
 **Usage:** `users.findOneAndRemove(object)`  
 **Returns:** `undefined` or `Boolean`  
@@ -239,7 +239,7 @@ users.findOneAndRemove({ name: 'Ariel', admin: true })
 users.$findOneAndRemove({ name: 'Ariel', admin: true })
   .then(console.log);
 ```
-##findAndModify
+## findAndModify
 get object properties to search, find the equivalents and modify them(`extend` operation).  
 **Usage:** `users.findAndModify(object, extend)`  
 **Aliases:** `update`  
@@ -255,7 +255,7 @@ users.update({ name: 'Ariel', admin: true }, { admin: false })
   users.$update({}, { list: { $push: ch } });
 });
 ```
-##findOneAndModify
+## findOneAndModify
 get object properties and modify(`extend` operation) the first matching.  
 **Usage:** `users.findOneAndModify(object, extend)`  
 **Aliases:** `updateOne`  
@@ -270,7 +270,7 @@ users.findOneAndModify({ admin: false }, { admin: true })
 users.$findOneAndModify({ admin: false }, { admin: true })
   .then(console.log);
 ```
-##findOrCreate
+## findOrCreate
 get object properties, search for document, if it not exist create one.  
 **Usage:** `users.findOrCreate(object)`    
 **Returns:** `Object`  
@@ -285,8 +285,8 @@ users.$findOrCreate({ admin: false, name: 'Ariel' })
   .then(console.log);
 ```
 
-#Queries
-###Operators
+# Queries
+### Operators
 * Logical & Conjunctive:
   * `$or` OR
   * `$and` AND
@@ -305,7 +305,7 @@ users.$findOrCreate({ admin: false, name: 'Ariel' })
   * `$regex` `new RegExp(...).test(value)`
   * `$size` test `array.length`
 
-###Examples
+### Examples
 ```js
 users.find({ a: 1, b: 2, c: '3' })
 // ... r WHERE r.a=1 AND r.b=2 AND r.c="3"
@@ -345,7 +345,7 @@ users.find({ $not: { age: { $type: 'number' } } })
 // ... r WHERE NOT(typeUDF(r.age, "number"))
 ```
 
-#Operations
+# Operations
 When using one of the update operations(**e.g:** `.update()`, `.findAndModify()`, etc...), you could use the built-in `prototype` functions(based on the type) prefixed with the `$` sign.  
 **Usage:** `users.update({ ... }, { keyName: { $method: value } })`  
 **Note:** value could be single or array of arguments.
@@ -360,7 +360,7 @@ users.update({}, { name: { $concat: '#' } });
 users.update({  name: 'foo' }, { name: { $substr: [1,1] } });
 ```
 
-#Schema
+# Schema
 Manage your documents with schema.  
 **fields:**
 * `type`
@@ -478,11 +478,11 @@ users.find({})
 ```
 see: [How to architect your models](https://github.com/a8m/doqmentdb/tree/master/example/users/model)
 
-#Middleware
+# Middleware
 Middleware/Hooks are executed at the document level(`create`/`save`/`insert`, `update`, `remove/delete`).  
 There are two types of middleware, **pre** and **post**.  
 
-##pre
+## pre
 **Usage:** `users.pre(operation, callback)`  
 **Note:** `pre` middleware are executed one after another, when each middleware calls next.  
 **Example:**
@@ -510,7 +510,7 @@ users.pre('save', function(next) {
 // ##Note: the order is important, this example order:
 // `createdAt()`, `updatedAT()`, `hash/bcrypt()`, and then the `.create` operation will called
 ```
-##post
+## post
 **Usage:** `users.post(operation, callback)`  
 **Note:** `post` middleware are executed in parallel.  
 **Example:**
@@ -519,7 +519,7 @@ users.post('save', function(doc) {
   logger(new Date(), doc, 'saved!')
 });
 ```
-#Atomic Transactions
+# Atomic Transactions
 Since **v0.2.6** DoQmentDB supports atomic-transactions using a built-in sporcs(i.e: stored procedures) to handle concurrently well.  
 **Note:** To perform some operation this way, you should prefix it with `$`.  
 **Read More:** [DocumentDB - Atomic Transactions](https://github.com/Azure/azure-content/blob/master/articles/documentdb-programming.md#introduction)
@@ -543,19 +543,19 @@ sbs.receiveQueueMessage('users', function(msg) {
 });
 ```
 
-#Examples
+# Examples
 * [Koa DocumentDB Example](https://github.com/a8m/koa-documentdb-example) - A users CRUD application using Koa and DocumentDB.
 * [Express DocumentDB Example](https://github.com/a8m/doqmentdb/tree/master/example/users) - Express application using DocumentDB.
 
-#Changelog
-##0.2.9
+# Changelog
+## 0.2.9
 * Schema Fix- issue #26
 
-##0.2.8
+## 0.2.8
 * Add aliases: `updateOne` and `$updateOne`(the conccurent one)
 * refactor the built-in stored procedure(`findAndModify`)
 
-##0.2.6
+## 0.2.6
 Since **0.2.6** DoQmentDB support atomic transactions using `DocumentDB stored procedures`.  
 Methods that support:
  * `update`/`findAndModify`
